@@ -1,41 +1,48 @@
 import 'package:get/get.dart';
 
-import '../modules/home/bindings/home_binding.dart';
-import '../modules/home/views/home_view.dart';
-import '../modules/masuk/bindings/masuk_binding.dart';
-import '../modules/masuk/views/masuk_view.dart';
-import '../modules/onboarding/bindings/onboarding_binding.dart';
-import '../modules/onboarding/views/onboarding_view.dart';
-import '../modules/splashscreen/bindings/splashscreen_binding.dart';
-import '../modules/splashscreen/views/splashscreen_view.dart';
+import '../modules/detail_pemeriksaan/bindings/detail_pemeriksaan_binding.dart';
+import '../modules/detail_pemeriksaan/views/detail_pemeriksaan_view.dart';
+import '../modules/rekam_medis/bindings/rekam_medis_binding.dart';
+import '../modules/rekam_medis/views/rekam_medis_view.dart';
+import '../modules/slice_rekam_medis/bindings/slice_rekam_medis_binding.dart';
+import '../modules/slice_rekam_medis/views/slice_rekam_medis_view.dart';
+import '../modules/tambah_pemeriksaan/bindings/tambah_pemeriksaan_binding.dart';
+import '../modules/tambah_pemeriksaan/views/tambah_pemeriksaan_view.dart';
+import '../modules/ubah_pemeriksaan/bindings/ubah_pemeriksaan_binding.dart';
+import '../modules/ubah_pemeriksaan/views/ubah_pemeriksaan_view.dart';
 
 part 'app_routes.dart';
 
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.SPLASHSCREEN;
+  static const INITIAL = Routes.REKAM_MEDIS;
 
   static final routes = [
     GetPage(
-      name: _Paths.HOME,
-      page: () => const HomeView(),
-      binding: HomeBinding(),
+      name: _Paths.REKAM_MEDIS,
+      page: () => const RekamMedisView(),
+      binding: RekamMedisBinding(),
     ),
     GetPage(
-      name: _Paths.MASUK,
-      page: () => const MasukView(),
-      binding: MasukBinding(),
+      name: _Paths.SLICE_REKAM_MEDIS,
+      page: () => const SliceRekamMedisView(),
+      binding: SliceRekamMedisBinding(),
     ),
     GetPage(
-      name: _Paths.SPLASHSCREEN,
-      page: () => const SplashscreenView(),
-      binding: SplashscreenBinding(),
+      name: _Paths.DETAIL_PEMERIKSAAN,
+      page: () => const DetailPemeriksaanView(),
+      binding: DetailPemeriksaanBinding(),
     ),
     GetPage(
-      name: _Paths.ONBOARDING,
-      page: () => const OnboardingView(),
-      binding: OnboardingBinding(),
+      name: _Paths.UBAH_PEMERIKSAAN,
+      page: () => const UbahPemeriksaanView(),
+      binding: UbahPemeriksaanBinding(),
+    ),
+    GetPage(
+      name: _Paths.TAMBAH_PEMERIKSAAN,
+      page: () => const TambahPemeriksaanView(),
+      binding: TambahPemeriksaanBinding(),
     ),
   ];
 }
