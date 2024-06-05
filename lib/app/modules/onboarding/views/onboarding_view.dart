@@ -1,22 +1,96 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
+import 'package:healthrecord/app/modules/masuk/views/masuk_view.dart';
+import 'package:healthrecord/app/routes/app_pages.dart';
+import 'package:page_transition/page_transition.dart';
 import '../controllers/onboarding_controller.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class OnboardingView extends GetView<OnboardingController> {
-  const OnboardingView({Key? key}) : super(key: key);
+  OnboardingView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('OnboardingView'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'OnboardingView is working',
-          style: TextStyle(fontSize: 20),
+    //RESPONSIVE
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    double screenWidth = mediaQuery.size.width;
+
+    return WillPopScope(
+      onWillPop: controller.onWillPop,
+      child: Scaffold(
+        body: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Image.asset("assets/images/Logo.png"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Container(
+                    width: screenWidth,
+                    height: 145.w,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff01CBEF),
+                      borderRadius:
+                          BorderRadius.circular(ScreenUtil().setWidth(10)),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "HEALTH RECORD",
+                          style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        Text(
+                          "Selamat Datang di Health Record\nPermudah Pendataan pasien\nTingkatkan Pelayanan",
+                          style: TextStyle(
+                            fontFamily: "Poppins",
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 80, bottom: 20),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          child: const MasukView(),
+                          type: PageTransitionType.fade,
+                          duration: const Duration(milliseconds: 400),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff01CBEF),
+                    ),
+                    child: Text(
+                      "Masuk",
+                      style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

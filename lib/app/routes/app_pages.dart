@@ -1,7 +1,13 @@
 import 'package:get/get.dart';
 
+import '../modules/daftar/bindings/daftar_binding.dart';
+import '../modules/daftar/views/daftar_view.dart';
+import '../modules/dashboard/bindings/dashboard_binding.dart';
+import '../modules/dashboard/views/dashboard_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/lupapassword/bindings/lupapassword_binding.dart';
+import '../modules/lupapassword/views/lupapassword_view.dart';
 import '../modules/masuk/bindings/masuk_binding.dart';
 import '../modules/masuk/views/masuk_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
@@ -34,8 +40,23 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ONBOARDING,
-      page: () => const OnboardingView(),
+      page: () => OnboardingView(),
       binding: OnboardingBinding(),
+    ),
+    GetPage(
+      name: _Paths.DAFTAR,
+      page: () => const DaftarView(),
+      binding: DaftarBinding(),
+    ),
+    GetPage(
+      name: _Paths.LUPAPASSWORD,
+      page: () => const LupapasswordView(),
+      binding: LupapasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.DASHBOARD,
+      page: () => const DashboardView(),
+      binding: DashboardBinding(),
     ),
   ];
 }
