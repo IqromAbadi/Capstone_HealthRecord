@@ -52,23 +52,6 @@ class MasukController extends GetxController {
       print(e);
     }
   }
-  /* Future<void> handleLogin(BuildContext context) async {
-    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
-      Get.snackbar('Error', 'Email dan Password harus diisi.');
-      return;
-    }
-
-    Masuk(emailController.text, passwordController.text);
-
-    Navigator.push(
-      context,
-      PageTransition(
-        type: PageTransitionType.fade,
-        duration: const Duration(milliseconds: 700),
-        child: const DashboardView(),
-      ),
-    );
-  }*/
 
   @override
   void onClose() {
