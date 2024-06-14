@@ -3,7 +3,7 @@ version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
 environment: 
-  sdk: '>=3.2.5 <4.0.0'
+  sdk: '>=3.4.1 <4.0.0'
 
 dependencies: 
   cupertino_icons: ^1.0.2
@@ -13,6 +13,8 @@ dependencies:
   firebase_core: ^2.27.0
   firebase_auth: ^4.17.8
   cloud_firestore: ^4.15.8
+  image_picker: ^0.8.6
+  get_storage: ^2.0.3
 
 dev_dependencies: 
   flutter_lints: ^2.0.0
@@ -21,7 +23,14 @@ dev_dependencies:
 
 flutter: 
   assets:
-    - assets/images/
+    - assets/images/antriann.png
+    - assets/images/jadwall.png
+    - assets/images/pasienn.png
+    - assets/images/rekammediss.png
+    - assets/images/vector.png
+    - assets/images/ruang1.jpg
+    - assets/images/ruang2.jpg
+    - assets/images/ruang3.jpg
   fonts:
     - family: Poppins
       fonts:
