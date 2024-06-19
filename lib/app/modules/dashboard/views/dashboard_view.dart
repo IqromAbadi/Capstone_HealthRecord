@@ -1,55 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart'; // Import Fluttertoast
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
-  const DashboardView({Key? key}) : super(key: key);
+  final String exitWarning = "Tekan lagi untuk keluar";
+  DateTime? currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 28),
-          child: Column(
+    return WillPopScope(
+      onWillPop: controller.onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color(0xFF01CBEF),
+          title: Row(
             children: [
-              headerSection(context),
-              imageSection(),
-              menuSection(context),
-              patientStatusSection(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget headerSection(BuildContext context) {
-    return Container(
-      color: Color(0xFF01CBEF),
-      padding: EdgeInsets.fromLTRB(20, 20, 28.1, 18),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 8),
-                decoration: BoxDecoration(
-                  color: Color(0xFFD9D9D9),
-                  shape: BoxShape.circle,
-                ),
-                padding: EdgeInsets.all(10),
-                child: Image.asset(
-                  'assets/images/vector.png',
-                  width: 16,
-                  height: 18.7,
-                ),
-              ),
+              Obx(() => CircleAvatar(
+                    backgroundImage: controller.profileImageUrl.value.isNotEmpty
+                        ? NetworkImage(controller.profileImageUrl.value)
+                        : const AssetImage('assets/images/vector.png')
+                            as ImageProvider,
+                    radius: 20,
+                  )),
+              const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Selamat Datang',
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -58,93 +37,117 @@ class DashboardView extends GetView<DashboardController> {
                       color: Colors.white,
                     ),
                   ),
-                  Text(
-                    'Dr.Viandini',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                      color: Colors.white,
-                    ),
-                  ),
+                  Obx(() => Text(
+                        controller.name.value,
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
+                      )),
                 ],
               ),
             ],
           ),
-          PopupMenuButton(
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem(
-                  child: Text('Profil Saya'),
-                  value: 'Profil Saya',
-                ),
-                PopupMenuItem(
-                  child: Text('Faq'),
-                  value: 'Faq',
-                ),
-                PopupMenuItem(
-                  child: Text('Keluar'),
-                  value: 'Keluar',
-                ),
-              ];
-            },
-            onSelected: (value) {
-              // Handle ketika salah satu pilihan dipilih
-              switch (value) {
-                case 'Profil Saya':
-                  Navigator.pushNamed(
-                      context, '/profile'); // Navigasi ke halaman Profil
-                  break;
-                case 'Faq':
-                  Navigator.pushNamed(
-                      context, '/faq'); // Navigasi ke halaman FAQ
-                  break;
-                case 'Keluar':
-                  Navigator.pushNamed(
-                      context, '/faq'); // Navigasi ke halaman Keluar
-                  break;
-                default:
-              }
-            },
-            icon: Icon(
-              Icons.more_vert,
-              color: const Color.fromARGB(255, 241, 90, 90),
+          actions: [
+            PopupMenuButton(
+              color: const Color(0xFF807D7D),
+              iconColor: Colors.white,
+              itemBuilder: (BuildContext context) {
+                return [
+                  const PopupMenuItem(
+                    child: Text(
+                      'Profil Saya',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    value: 'Profil Saya',
+                  ),
+                  const PopupMenuItem(
+                    child: Text(
+                      'Faq',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    value: 'Faq',
+                  ),
+                  const PopupMenuItem(
+                    child: Text(
+                      'Keluar',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    value: 'Keluar',
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                // Handle ketika salah satu pilihan dipilih
+                switch (value) {
+                  case 'Profil Saya':
+                    Navigator.pushNamed(
+                        context, '/profile'); // Navigasi ke halaman Profil
+                    break;
+                  case 'Faq':
+                    Navigator.pushNamed(
+                        context, '/faq'); // Navigasi ke halaman FAQ
+                    break;
+                  case 'Keluar':
+                    controller.logout(); // Panggil fungsi logout di controller
+                    break;
+                  default:
+                }
+              },
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 28),
+            child: Column(
+              children: [
+                imageSection(),
+                menuSection(context),
+                patientStatusSection(),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget imageSection() {
     return Container(
-      margin: EdgeInsets.fromLTRB(19, 0, 19, 22),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+      margin: const EdgeInsets.fromLTRB(19, 20, 19, 22),
       height: 136,
-      child: PageView(
-        children: [
-          Image.asset(
-            'assets/images/ruang1.jpg',
-            fit: BoxFit.cover,
-          ),
-          Image.asset(
-            'assets/images/ruang2.jpg',
-            fit: BoxFit.cover,
-          ),
-          Image.asset(
-            'assets/images/ruang3.jpg',
-            fit: BoxFit.cover,
-          ),
-        ],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: PageView(
+          children: [
+            Image.asset(
+              'assets/images/ruang1.jpg',
+              fit: BoxFit.cover,
+            ),
+            Image.asset(
+              'assets/images/ruang2.jpg',
+              fit: BoxFit.cover,
+            ),
+            Image.asset(
+              'assets/images/ruang3.jpg',
+              fit: BoxFit.cover,
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget menuSection(context) {
+  Widget menuSection(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(19, 0, 19, 18),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.fromLTRB(19, 0, 19, 18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0x9901CBEF),
+        color: const Color(0x9901CBEF),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -156,7 +159,7 @@ class DashboardView extends GetView<DashboardController> {
               GestureDetector(
                 onTap: () {
                   // Navigasi ke halaman pasien
-                  Navigator.pushNamed(context, '/jadwalpraktik');
+                  Navigator.pushNamed(context, '/pasienlist');
                 },
                 child: menuItem('Pasien', 'assets/images/pasienn.png'),
               ),
@@ -169,7 +172,7 @@ class DashboardView extends GetView<DashboardController> {
               ),
             ],
           ),
-          SizedBox(height: 22.4),
+          const SizedBox(height: 22.4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -183,7 +186,7 @@ class DashboardView extends GetView<DashboardController> {
               GestureDetector(
                 onTap: () {
                   // Navigasi ke halaman antrian pasien
-                  Navigator.pushNamed(context, '/antrian_pa');
+                  Navigator.pushNamed(context, '/antrianpasien');
                 },
                 child: menuItem('Antrian Pasien', 'assets/images/antriann.png'),
               ),
@@ -198,12 +201,12 @@ class DashboardView extends GetView<DashboardController> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(bottom: 14.2),
+          margin: const EdgeInsets.only(bottom: 14.2),
           width: 121.4,
           height: 117.8,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Color(0xFFC4C4C4),
+            color: const Color(0xFFC4C4C4),
             image: DecorationImage(
               fit: BoxFit.contain,
               image: AssetImage(imagePath),
@@ -212,7 +215,7 @@ class DashboardView extends GetView<DashboardController> {
         ),
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 12,
@@ -225,61 +228,75 @@ class DashboardView extends GetView<DashboardController> {
 
   Widget patientStatusSection() {
     return Container(
-      margin: EdgeInsets.fromLTRB(19, 0, 19, 18),
+      margin: const EdgeInsets.fromLTRB(19, 0, 19, 18),
       child: Column(
         children: [
-          patientStatusItem(
-              'Sudah Terdaftar', '0 Pasien', 'assets/images/vector.png'),
-          patientStatusItem(
-              'Belum Dilayani', '0 Pasien', 'assets/images/vector.png'),
-          patientStatusItem(
-              'Sudah Dilayani', '0 Pasien', 'assets/images/vector.png'),
+          Obx(() => patientStatusItem(
+              'Sudah Terdaftar',
+              controller.sudahTerdaftarCount.value,
+              'assets/images/vector.png')),
+          Obx(() => patientStatusItem('Belum Dilayani',
+              controller.belumDilayaniCount.value, 'assets/images/vector.png')),
+          Obx(() => patientStatusItem('Sudah Dilayani',
+              controller.sudahDilayaniCount.value, 'assets/images/vector.png')),
         ],
       ),
     );
   }
 
-  Widget patientStatusItem(String status, String count, String iconPath) {
+  Widget patientStatusItem(String title, String count, String imagePath) {
     return Container(
-      margin: EdgeInsets.only(bottom: 14),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0xFF01CBEF),
+        color: const Color(0x9901CBEF),
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(right: 14.7),
-            width: 46.5,
-            height: 46,
-            child: Image.asset(iconPath),
-          ),
-          Text(
-            '$status :',
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              color: Colors.black,
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
+              color: Color(0xFFC4C4C4),
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              imagePath,
+              width: 24,
+              height: 24,
             ),
           ),
-          Spacer(),
-          Text(
-            count,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              color: Colors.black,
-            ),
-          ),
-          SizedBox(width: 15.5),
-          Text(
-            count,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              color: Colors.black,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+              Text(
+                count,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
         ],
       ),

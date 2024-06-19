@@ -9,88 +9,87 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Jadwal Praktik'),
+        backgroundColor: const Color(0xFF01CBEF),
+        title: const Text(
+          'Jadwal Praktik',
+          style: TextStyle(
+            fontFamily: 'Poppins-Medium',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Doctor Info Widget
-            Container(
-              margin: EdgeInsets.fromLTRB(1, 0, 0, 29),
-              child: Container(
+            Obx(
+              () => Container(
+                margin: const EdgeInsets.fromLTRB(1, 0, 0, 29),
                 decoration: BoxDecoration(
-                  color: Color(0xFF01CBEF),
+                  color: const Color(0xFFC4C4C4),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: SizedBox(
-                  width: 275,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 13, 0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xFF807D7D),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Container(
-                            width: 104,
-                            height: 113,
-                            padding: EdgeInsets.fromLTRB(0, 41, 0, 40),
-                            child: SizedBox(
-                              width: 16,
-                              height: 20,
-                              child: Image.asset(
-                                'assets/images/vector.png',
-                              ),
-                            ),
-                          ),
-                        ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 0, 13, 0),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF807D7D),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 18, 0, 47),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 4.5, 2),
-                              child: Text(
-                                'Dr. Viandini',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  color: Color(0xFF000000),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: controller.profileImageUrl.value.isNotEmpty
+                            ? Image.network(
+                                controller.profileImageUrl.value,
+                                width: 104,
+                                height: 113,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(
+                                width: 104,
+                                height: 113,
+                                color: Colors.grey,
+                                child: const Icon(
+                                  Icons.person,
+                                  size: 50,
+                                  color: Colors.white,
                                 ),
                               ),
-                            ),
-                            Text(
-                              '***********',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                color: Color(0xFF000000),
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(0, 18, 0, 47),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            controller.name.value,
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
             // Header
             Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: Center(
+              margin: const EdgeInsets.only(bottom: 20),
+              child: const Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -113,17 +112,17 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
                   itemBuilder: (context, hariIndex) {
                     var jadwal = controller.jadwalPraktik[hariIndex];
                     return Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      padding: EdgeInsets.all(20),
+                      margin: const EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Color(0xFF01CBEF),
+                        color: const Color(0xFF01CBEF),
                         border: Border.all(color: Colors.black),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 0),
+                          const SizedBox(height: 0),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: jadwal.waktuPraktik
@@ -138,7 +137,7 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
                                 children: [
                                   Text(
                                     jadwal.hari,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,
                                     ),
@@ -147,7 +146,7 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
                                     children: [
                                       Text(waktu.jamPraktik),
                                       IconButton(
-                                        icon: Icon(Icons.edit),
+                                        icon: const Icon(Icons.edit),
                                         onPressed: () {
                                           _showEditDialog(context, hariIndex,
                                               waktuIndex, waktu.jamPraktik);
@@ -183,7 +182,7 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
         children: [
           TextField(
             controller: jamController,
-            decoration: InputDecoration(labelText: 'Jam Praktik'),
+            decoration: const InputDecoration(labelText: 'Jam Praktik'),
           ),
         ],
       ),
