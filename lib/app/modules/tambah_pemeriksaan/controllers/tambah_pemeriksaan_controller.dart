@@ -148,7 +148,7 @@ class TambahPemeriksaanController extends GetxController {
       'berat_badan': beratBadanController.text,
     }).then((value) {
       Get.snackbar('Sukses', 'Data berhasil disimpan');
-      Get.offAllNamed(Routes.REKAM_MEDIS);
+      Get.offNamed(Routes.REKAM_MEDIS);
     }).catchError((error) {
       Get.snackbar('Error', 'Gagal menyimpan data: $error');
     });
