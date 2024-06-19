@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:healthrecord/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:healthrecord/app/modules/onboarding/views/onboarding_view.dart';
 import 'package:healthrecord/app/modules/splashscreen/controllers/splashscreen_controller.dart';
-import 'package:healthrecord/app/routes/app_pages.dart';
 import 'package:page_transition/page_transition.dart';
 
 class SplashscreenView extends GetView<SplashscreenController> {
@@ -15,7 +14,8 @@ class SplashscreenView extends GetView<SplashscreenController> {
     Future.delayed(const Duration(seconds: 3), () async {
       User? user = FirebaseAuth.instance.currentUser;
       if (user == null) {
-        Navigator.pushReplacement(
+        Get.offNamed('/onboarding');
+        (
           context,
           PageTransition(
             child: OnboardingView(),
@@ -24,7 +24,8 @@ class SplashscreenView extends GetView<SplashscreenController> {
           ),
         );
       } else {
-        Navigator.pushReplacement(
+        Get.offNamed('/dashboard');
+        (
           context,
           PageTransition(
             child: DashboardView(),
