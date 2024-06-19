@@ -54,11 +54,15 @@ class EditpasienController extends GetxController {
         'jenis_kelamin': jenisKelamin.value,
       });
 
-      Get.snackbar('Sukses', 'Data pasien berhasil diperbarui',
-          backgroundColor: Colors.green);
+      Get.snackbar(
+        'Sukses',
+        'Data pasien berhasil diperbarui',
+      );
     } else {
-      Get.snackbar('Gagal', 'Data pasien gagal diperbarui',
-          backgroundColor: Colors.red);
+      Get.snackbar(
+        'Gagal',
+        'Data pasien gagal diperbarui',
+      );
     }
   }
 

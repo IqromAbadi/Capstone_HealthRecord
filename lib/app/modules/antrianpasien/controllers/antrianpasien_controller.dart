@@ -188,7 +188,8 @@ class AntrianpasienController extends GetxController {
                           style: TextStyle(color: Colors.black),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 1, 203, 239),
+                          backgroundColor:
+                              const Color.fromARGB(255, 1, 203, 239),
                         ),
                       ),
                       ElevatedButton(
@@ -200,7 +201,8 @@ class AntrianpasienController extends GetxController {
                           style: TextStyle(color: Colors.black),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 1, 203, 239),
+                          backgroundColor:
+                              const Color.fromARGB(255, 1, 203, 239),
                         ),
                       ),
                     ],
