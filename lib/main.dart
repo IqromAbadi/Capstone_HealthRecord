@@ -2,11 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:healthrecord/app/modules/dashboard/controllers/dashboard_controller.dart';
 import 'package:healthrecord/app/modules/lupapassword/controllers/lupapassword_controller.dart';
 import 'package:healthrecord/app/modules/masuk/controllers/masuk_controller.dart';
 import 'package:healthrecord/app/modules/onboarding/controllers/onboarding_controller.dart';
 import 'package:healthrecord/app/modules/antrianpasien/controllers/antrianpasien_controller.dart';
-import 'package:healthrecord/app/modules/splashscreen/views/splashscreen_view.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -25,6 +25,7 @@ void main() async {
   Get.put(LupapasswordController());
   Get.put(OnboardingController());
   Get.put(AntrianpasienController());
+  Get.put(DashboardController());
   runApp(
     ScreenUtilInit(
       designSize: const Size(450, 975),

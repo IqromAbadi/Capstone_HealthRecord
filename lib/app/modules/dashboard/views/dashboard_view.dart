@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:fluttertoast/fluttertoast.dart'; // Import Fluttertoast
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
-  final String exitWarning = "Tekan lagi untuk keluar";
-  DateTime? currentBackPressTime;
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
