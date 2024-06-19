@@ -120,10 +120,9 @@ class MyCard extends StatelessWidget {
       height: 100,
       decoration: BoxDecoration(
         color: belumDilayani
-            ? const Color.fromARGB(
-                128, 1, 203, 239) // Warna transparan jika Belum Dilayani
+            ? const Color(0xFF01CBEF) // Warna transparan jika Belum Dilayani
             : const Color.fromARGB(
-                255, 1, 203, 239), // Warna utama jika sudah dilayani
+                255, 223, 73, 73), // Warna utama jika sudah dilayani
         borderRadius: BorderRadius.circular(15),
         border: Border.all(width: 1, color: const Color(0xFFEFEFEF)),
       ),
@@ -144,7 +143,11 @@ class MyCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   title,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                  style: const TextStyle(
+                      fontFamily: "Poppins",
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
                 ),
               ],
             ),

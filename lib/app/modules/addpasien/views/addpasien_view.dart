@@ -20,7 +20,6 @@ class AddpasienView extends GetView<AddpasienController> {
             fontWeight: FontWeight.w700,
           ),
         ),
-        
         centerTitle: true,
       ),
       body: SingleChildScrollView(

@@ -27,22 +27,20 @@ class JadwalpraktikController extends GetxController {
     }
   }
 
-  void fetchProfileData() async {
-    try {
-      isLoading(true);
-      DocumentSnapshot userProfile = await FirebaseFirestore.instance
-          .collection('profile')
-          .doc('38NjyRltFiX0ezjiFMUe') // ganti dengan user ID yang sesuai
-          .get();
-
-      name.value = userProfile['nama'];
-      profileImageUrl.value =
-          userProfile['profileImageUrl']; // Mengambil URL gambar profil
-    } catch (e) {
-      print(e);
-    } finally {
+  void fetchProfileData() {
+    isLoading(true);
+    FirebaseFirestore.instance
+        .collection('profile')
+        .doc('38NjyRltFiX0ezjiFMUe') // ganti dengan user ID yang sesuai
+        .snapshots()
+        .listen((userProfile) {
+      if (userProfile.exists) {
+        name.value = userProfile['nama'];
+        profileImageUrl.value =
+            userProfile['profileImageUrl']; // Mengambil URL gambar profil
+      }
       isLoading(false);
-    }
+    });
   }
 
   void getJadwalPraktik() {
