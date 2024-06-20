@@ -30,6 +30,18 @@ class FaqView extends StatelessWidget {
               'Prosedur Pendaftaran Pasien',
               'Ini adalah penjelasan tentang prosedur pendaftaran pasien.',
             ),
+            faqItem(
+              'Cara Mengupdate Data Pasien',
+              'Ini adalah penjelasan tentang cara mengupdate data pasien.',
+            ),
+            faqItem(
+              'Cara Menghapus Data Pasien',
+              'Ini adalah penjelasan tentang cara menghapus data pasien.',
+            ),
+            faqItem(
+              'Cara Mengakses Riwayat Medis Pasien',
+              'Ini adalah penjelasan tentang cara mengakses riwayat medis pasien.',
+            ),
           ],
         ),
       ),

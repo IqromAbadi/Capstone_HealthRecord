@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -9,27 +8,34 @@ class ProfileView extends GetView<ProfileController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 28),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: Obx(
+        () {
+          if (controller.isLoading.value) {
+            return Center(child: CircularProgressIndicator());
+          }
+          return SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 28),
+              child: Stack(
                 children: [
-                  _profileHeader(context),
-                  _infoAkunSection(),
-                  _buttonUbahProfil(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _profileHeader(context),
+                      _infoAkunSection(),
+                      _buttonUbahProfil(),
+                    ],
+                  ),
+                  Positioned(
+                    right: 64,
+                    top: 234,
+                    child: _buttonKembaliKeMenu(),
+                  ),
                 ],
               ),
-              Positioned(
-                right: 64,
-                top: 234,
-                child: _buttonKembaliKeMenu(),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -52,28 +58,27 @@ class ProfileView extends GetView<ProfileController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.fromLTRB(0, 0, 0, 18),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 148, 34, 34),
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    padding: EdgeInsets.fromLTRB(0, 26.2, 0, 35.7),
-                    child: SizedBox(
-                      width: 38.1,
-                      height: 38.1,
-                      child: Image.asset(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: Obx(() {
+                  if (controller.profileImageUrl.value.isNotEmpty) {
+                    return CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          controller.profileImageUrl.value,
+                        ),
+                        radius: 50 // Adjust the radius here for larger avatar
+                        );
+                  } else {
+                    return CircleAvatar(
+                      backgroundImage: AssetImage(
                         'assets/images/vector.png',
                       ),
-                    ),
-                  ),
-                ),
+                      radius: 50, // Adjust the radius here for larger avatar
+                    );
+                  }
+                }),
               ),
               Text(
-                'Dr. Viandini',
+                controller.name.value,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
@@ -119,9 +124,9 @@ class ProfileView extends GetView<ProfileController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _infoAkunItem('Nama', 'Dr. Viandini'),
-                  _infoAkunItem('Email', 'Viandinini@gmail.com'),
-                  _infoAkunItem('Nomor Telepon', '0874874698746'),
+                  _infoAkunItem('Nama', controller.name.value),
+                  _infoAkunItem('Email', controller.email.value),
+                  _infoAkunItem('Nomor Telepon', controller.phoneNumber.value),
                 ],
               ),
             ),
@@ -207,7 +212,7 @@ class ProfileView extends GetView<ProfileController> {
         Get.back();
       },
       child: Container(
-        width: 280,
+        width: 241,
         height: 41,
         decoration: BoxDecoration(
           color: Color(0xFFC4C4C4),

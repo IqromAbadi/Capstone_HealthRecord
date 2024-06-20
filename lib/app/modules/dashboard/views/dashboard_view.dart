@@ -33,19 +33,14 @@ class DashboardView extends GetView<DashboardController> {
         children: [
           Row(
             children: [
-              Container(
-                margin: EdgeInsets.only(right: 8),
-                decoration: BoxDecoration(
-                  color: Color(0xFFD9D9D9),
-                  shape: BoxShape.circle,
-                ),
-                padding: EdgeInsets.all(10),
-                child: Image.asset(
-                  'assets/images/vector.png',
-                  width: 16,
-                  height: 18.7,
-                ),
-              ),
+              Obx(() => CircleAvatar(
+                    backgroundImage: controller.profileImageUrl.value.isNotEmpty
+                        ? NetworkImage(controller.profileImageUrl.value)
+                        : AssetImage('assets/images/vector.png')
+                            as ImageProvider,
+                    radius: 20,
+                  )),
+              SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -58,15 +53,15 @@ class DashboardView extends GetView<DashboardController> {
                       color: Colors.white,
                     ),
                   ),
-                  Text(
-                    'Dr.Viandini',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 12,
-                      color: Colors.white,
-                    ),
-                  ),
+                  Obx(() => Text(
+                        controller.name.value,
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
+                      )),
                 ],
               ),
             ],
@@ -100,8 +95,8 @@ class DashboardView extends GetView<DashboardController> {
                       context, '/faq'); // Navigasi ke halaman FAQ
                   break;
                 case 'Keluar':
-                  Navigator.pushNamed(
-                      context, '/faq'); // Navigasi ke halaman Keluar
+                  Navigator.pushNamed(context,
+                      '/masuk'); // Navigasi ke halaman Login atau keluar
                   break;
                 default:
               }
@@ -139,7 +134,7 @@ class DashboardView extends GetView<DashboardController> {
     );
   }
 
-  Widget menuSection(context) {
+  Widget menuSection(BuildContext context) {
     return Container(
       margin: EdgeInsets.fromLTRB(19, 0, 19, 18),
       padding: EdgeInsets.all(16),
@@ -156,7 +151,7 @@ class DashboardView extends GetView<DashboardController> {
               GestureDetector(
                 onTap: () {
                   // Navigasi ke halaman pasien
-                  Navigator.pushNamed(context, '/jadwalpraktik');
+                  Navigator.pushNamed(context, '/pasienlist');
                 },
                 child: menuItem('Pasien', 'assets/images/pasienn.png'),
               ),
@@ -183,7 +178,7 @@ class DashboardView extends GetView<DashboardController> {
               GestureDetector(
                 onTap: () {
                   // Navigasi ke halaman antrian pasien
-                  Navigator.pushNamed(context, '/antrian_pa');
+                  Navigator.pushNamed(context, '/antrianpasien');
                 },
                 child: menuItem('Antrian Pasien', 'assets/images/antriann.png'),
               ),
@@ -228,58 +223,72 @@ class DashboardView extends GetView<DashboardController> {
       margin: EdgeInsets.fromLTRB(19, 0, 19, 18),
       child: Column(
         children: [
-          patientStatusItem(
-              'Sudah Terdaftar', '0 Pasien', 'assets/images/vector.png'),
-          patientStatusItem(
-              'Belum Dilayani', '0 Pasien', 'assets/images/vector.png'),
-          patientStatusItem(
-              'Sudah Dilayani', '0 Pasien', 'assets/images/vector.png'),
+          Obx(() => patientStatusItem(
+              'Sudah Terdaftar',
+              controller.sudahTerdaftarCount.value,
+              'assets/images/vector.png')),
+          Obx(() => patientStatusItem('Belum Dilayani',
+              controller.belumDilayaniCount.value, 'assets/images/vector.png')),
+          Obx(() => patientStatusItem('Sudah Dilayani',
+              controller.sudahDilayaniCount.value, 'assets/images/vector.png')),
         ],
       ),
     );
   }
 
-  Widget patientStatusItem(String status, String count, String iconPath) {
+  Widget patientStatusItem(String title, String count, String imagePath) {
     return Container(
-      margin: EdgeInsets.only(bottom: 14),
+      margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0xFF01CBEF),
+        color: Color(0x9901CBEF),
         borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(right: 14.7),
-            width: 46.5,
-            height: 46,
-            child: Image.asset(iconPath),
-          ),
-          Text(
-            '$status :',
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              color: Colors.black,
+            margin: EdgeInsets.only(right: 16),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Color(0xFFC4C4C4),
+              shape: BoxShape.circle,
+            ),
+            child: Image.asset(
+              imagePath,
+              width: 24,
+              height: 24,
             ),
           ),
-          Spacer(),
-          Text(
-            count,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              color: Colors.black,
-            ),
-          ),
-          SizedBox(width: 15.5),
-          Text(
-            count,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              color: Colors.black,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+              Text(
+                count,
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 12,
+                  color: Colors.black,
+                ),
+              ),
+            ],
           ),
         ],
       ),

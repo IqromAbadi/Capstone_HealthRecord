@@ -1,23 +1,18 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class OnboardingController extends GetxController {
-  //TODO: Implement OnboardingController
+  DateTime? currentBackPressTime;
+  final String exitWarning = "Tekan lagi untuk keluar";
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  Future<bool> onWillPop() async {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(msg: exitWarning);
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

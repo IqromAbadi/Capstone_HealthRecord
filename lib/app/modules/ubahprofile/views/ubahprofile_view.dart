@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../controllers/ubahprofile_controller.dart';
 
@@ -55,30 +54,35 @@ class UbahprofileView extends GetView<UbahprofileController> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      margin: EdgeInsets.fromLTRB(0, 0, 44, 0),
-                      child: Container(
+                    Obx(() {
+                      return Container(
+                        margin: EdgeInsets.fromLTRB(0, 0, 44, 0),
                         decoration: BoxDecoration(
                           color: Color(0xFFC4C4C4),
                           borderRadius: BorderRadius.circular(50),
+                          image: controller.profileImageUrl.value.isNotEmpty
+                              ? DecorationImage(
+                                  image: NetworkImage(
+                                      controller.profileImageUrl.value),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                         ),
                         child: Container(
                           width: 100,
                           height: 100,
                           padding: EdgeInsets.fromLTRB(0, 26.2, 0, 35.7),
-                          child: SizedBox(
-                            width: 38.1,
-                            height: 38.1,
-                            child: Image.asset(
-                              'assets/images/vector.png',
-                            ),
-                          ),
+                          child: controller.profileImageUrl.value.isEmpty
+                              ? Image.asset(
+                                  'assets/images/vector.png',
+                                )
+                              : null,
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                     GestureDetector(
-                      onTap: () {
-                        // Tambahkan aksi ketika tombol diubah diklik
+                      onTap: () async {
+                        await controller.pickImage();
                       },
                       child: Container(
                         margin: EdgeInsets.fromLTRB(0, 34, 0, 34),
@@ -86,29 +90,21 @@ class UbahprofileView extends GetView<UbahprofileController> {
                           color: Color(0xFF01CBEF),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: GestureDetector(
-                          onTap: () async {
-                            XFile? pickedImage = await ImagePicker()
-                                .pickImage(source: ImageSource.gallery);
-                            // Lakukan sesuatu dengan gambar yang dipilih
-                          },
-                          child: Container(
-                            width: 126.1,
-                            padding: EdgeInsets.fromLTRB(0, 8, 0.6, 8),
-                            alignment: Alignment
-                                .center, // Meletakkan teks di tengah secara horizontal
-                            decoration: BoxDecoration(
-                              color: Color(0xFF01CBEF),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              'Ambil Foto',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 13,
-                                color: Colors.white,
-                              ),
+                        child: Container(
+                          width: 126.1,
+                          padding: EdgeInsets.fromLTRB(0, 8, 0.6, 8),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF01CBEF),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            'Ambil Foto',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 13,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -119,42 +115,36 @@ class UbahprofileView extends GetView<UbahprofileController> {
               ),
             ),
           ),
-          _infoRow('Nama'),
-          _infoRow('Nomor Telepon'),
+          _infoRow('Nama', controller.nameController),
+          _infoRow('Nomor Telepon', controller.phoneController),
           Container(
             margin: EdgeInsets.fromLTRB(0, 0, 2, 0),
             child: Align(
               alignment: Alignment.topCenter,
               child: GestureDetector(
                 onTap: () {
-                  // Tambahkan aksi ketika tombol simpan diklik
+                  controller.saveProfile();
                 },
                 child: Container(
                   decoration: BoxDecoration(
                     color: Color(0xFF01CBEF),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context); // Kembali ke halaman sebelumnya
-                    },
-                    child: Container(
-                      width: 170,
-                      padding: EdgeInsets.fromLTRB(0, 7, 0.8, 7),
-                      alignment: Alignment
-                          .center, // Meletakkan teks di tengah secara horizontal
-                      decoration: BoxDecoration(
-                        color: Color(0xFF01CBEF),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Text(
-                        'Simpan',
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 13,
-                          color: Colors.white,
-                        ),
+                  child: Container(
+                    width: 170,
+                    padding: EdgeInsets.fromLTRB(0, 7, 0.8, 7),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF01CBEF),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'Simpan',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 13,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -167,7 +157,7 @@ class UbahprofileView extends GetView<UbahprofileController> {
     );
   }
 
-  Widget _infoRow(String label) {
+  Widget _infoRow(String label, TextEditingController controller) {
     return Container(
       margin: EdgeInsets.fromLTRB(21, 0, 21, 28),
       child: Column(
@@ -189,13 +179,10 @@ class UbahprofileView extends GetView<UbahprofileController> {
               ),
             ),
           ),
-          Container(
-            decoration: BoxDecoration(
-              color: Color(0xFF000000),
-            ),
-            child: Container(
-              width: 316,
-              height: 2,
+          TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              border: UnderlineInputBorder(),
             ),
           ),
         ],

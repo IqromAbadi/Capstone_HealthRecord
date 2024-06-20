@@ -18,72 +18,63 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Doctor Info Widget
-            Container(
-              margin: EdgeInsets.fromLTRB(1, 0, 0, 29),
-              child: Container(
+            Obx(
+              () => Container(
+                margin: EdgeInsets.fromLTRB(1, 0, 0, 29),
                 decoration: BoxDecoration(
                   color: Color(0xFF01CBEF),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: SizedBox(
-                  width: 275,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 0, 13, 0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xFF807D7D),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Container(
-                            width: 104,
-                            height: 113,
-                            padding: EdgeInsets.fromLTRB(0, 41, 0, 40),
-                            child: SizedBox(
-                              width: 16,
-                              height: 20,
-                              child: Image.asset(
-                                'assets/images/vector.png',
-                              ),
-                            ),
-                          ),
-                        ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 0, 13, 0),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF807D7D),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0, 18, 0, 47),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0, 0, 4.5, 2),
-                              child: Text(
-                                'Dr. Viandini',
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  color: Color(0xFF000000),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: controller.profileImageUrl.value.isNotEmpty
+                            ? Image.network(
+                                controller.profileImageUrl.value,
+                                width: 104,
+                                height: 113,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(
+                                width: 104,
+                                height: 113,
+                                color: Colors.grey,
+                                child: Icon(
+                                  Icons.person,
+                                  size: 50,
+                                  color: Colors.white,
                                 ),
                               ),
-                            ),
-                            Text(
-                              '***********',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                color: Color(0xFF000000),
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(0, 18, 0, 47),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            controller.name.value,
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Color(0xFF000000),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

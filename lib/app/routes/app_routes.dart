@@ -12,6 +12,16 @@ abstract class Routes {
   static const JADWALPRAKTIK = _Paths.JADWALPRAKTIK;
   static const PROFILE = _Paths.PROFILE;
   static const UBAHPROFILE = _Paths.UBAHPROFILE;
+  static const LUPAPASSWORD = _Paths.LUPAPASSWORD;
+  static const ADDPASIEN = _Paths.ADDPASIEN;
+  static const PASIENLIST = _Paths.PASIENLIST;
+  static const EDITPASIEN = _Paths.EDITPASIEN;
+  static const DETAILPASIEN = _Paths.DETAILPASIEN;
+  static const ANTRIANPASIEN = _Paths.ANTRIANPASIEN;
+  static const REKAM_MEDIS = _Paths.REKAM_MEDIS;
+  static const UBAH_PEMERIKSAAN = _Paths.UBAH_PEMERIKSAAN;
+  static const DETAIL_PEMERIKSAAN = _Paths.DETAIL_PEMERIKSAAN;
+  static const TAMBAH_PEMERIKSAAN = _Paths.TAMBAH_PEMERIKSAAN;
 }
 
 abstract class _Paths {
@@ -25,4 +35,14 @@ abstract class _Paths {
   static const JADWALPRAKTIK = '/jadwalpraktik';
   static const PROFILE = '/profile';
   static const UBAHPROFILE = '/ubahprofile';
+  static const LUPAPASSWORD = '/lupapassword';
+  static const ADDPASIEN = '/addpasien';
+  static const PASIENLIST = '/pasienlist';
+  static const EDITPASIEN = '/editpasien';
+  static const DETAILPASIEN = '/detailpasien';
+  static const ANTRIANPASIEN = '/antrianpasien';
+  static const REKAM_MEDIS = '/rekam_medis';
+  static const UBAH_PEMERIKSAAN = '/ubah-pemeriksaan';
+  static const DETAIL_PEMERIKSAAN = '/detail-pemeriksaan';
+  static const TAMBAH_PEMERIKSAAN = '/tambah-pemeriksaan';
 }

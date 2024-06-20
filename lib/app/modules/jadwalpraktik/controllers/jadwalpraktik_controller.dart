@@ -1,14 +1,19 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class JadwalpraktikController extends GetxController {
   RxList<JadwalPraktik> jadwalPraktik = <JadwalPraktik>[].obs;
   final box = GetStorage();
+  var name = ''.obs;
+  var profileImageUrl = ''.obs; // Menambahkan variabel profileImageUrl
+  var isLoading = true.obs;
 
   @override
   void onInit() {
     super.onInit();
     loadJadwalPraktik();
+    fetchProfileData();
   }
 
   void loadJadwalPraktik() {
@@ -19,6 +24,24 @@ class JadwalpraktikController extends GetxController {
           .toList();
     } else {
       getJadwalPraktik();
+    }
+  }
+
+  void fetchProfileData() async {
+    try {
+      isLoading(true);
+      DocumentSnapshot userProfile = await FirebaseFirestore.instance
+          .collection('profile')
+          .doc('38NjyRltFiX0ezjiFMUe') // ganti dengan user ID yang sesuai
+          .get();
+
+      name.value = userProfile['nama'];
+      profileImageUrl.value =
+          userProfile['profileImageUrl']; // Mengambil URL gambar profil
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading(false);
     }
   }
 
