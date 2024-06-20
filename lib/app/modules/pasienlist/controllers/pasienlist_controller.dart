@@ -15,15 +15,16 @@ class PasienlistController extends GetxController {
     searchTextController.addListener(_searchPasien);
   }
 
-  void fetchPasienList() async {
-    var result = await FirebaseFirestore.instance.collection('pasien').get();
-    var list = result.docs.map((doc) {
-      var data = doc.data();
-      data['id'] = doc.id;
-      return data;
-    }).toList();
-    pasienList.value = list;
-    filteredPasienList.value = list;
+  void fetchPasienList() {
+    FirebaseFirestore.instance
+        .collection('pasien')
+        .snapshots()
+        .listen((snapshot) {
+      pasienList.value =
+          snapshot.docs.map((doc) => doc.data()..['id'] = doc.id).toList();
+      // Update filteredPasienList after pasienList is updated
+      _searchPasien();
+    });
   }
 
   void _searchPasien() {
@@ -40,15 +41,21 @@ class PasienlistController extends GetxController {
 
   void deletePasien(String id) async {
     await FirebaseFirestore.instance.collection('pasien').doc(id).delete();
-    fetchPasienList();
   }
 
-  void openWhatsApp(String phone) async {
-    String url = "https://wa.me/$phone";
+  void openWhatsApp(String telpon) async {
+    String url = "https://wa.me/$telpon";
     if (await canLaunch(url)) {
       await launch(url);
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  @override
+  void onClose() {
+    // Clean up controllers
+    searchTextController.dispose();
+    super.onClose();
   }
 }

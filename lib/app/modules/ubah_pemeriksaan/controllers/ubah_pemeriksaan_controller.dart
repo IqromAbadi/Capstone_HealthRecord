@@ -203,7 +203,7 @@ class UbahPemeriksaanController extends GetxController {
       'berat_badan': beratBadanController.text,
     }).then((value) {
       Get.snackbar('Sukses', 'Data berhasil diperbarui');
-      Get.offAllNamed(Routes.REKAM_MEDIS);
+      Get.offNamed(Routes.REKAM_MEDIS);
     }).catchError((error) {
       Get.snackbar('Error', 'Gagal memperbarui data: $error');
     });

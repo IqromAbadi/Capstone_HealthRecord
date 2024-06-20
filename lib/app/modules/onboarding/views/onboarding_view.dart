@@ -25,7 +25,7 @@ class OnboardingView extends GetView<OnboardingController> {
                   child: Image.asset("assets/images/Logo.png"),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(20),
                   child: Container(
                     width: screenWidth,
                     height: 145.w,
@@ -67,7 +67,7 @@ class OnboardingView extends GetView<OnboardingController> {
                         PageTransition(
                           child: const MasukView(),
                           type: PageTransitionType.fade,
-                          duration: Duration(milliseconds: 400),
+                          duration: const Duration(milliseconds: 400),
                         ),
                       );
                     },

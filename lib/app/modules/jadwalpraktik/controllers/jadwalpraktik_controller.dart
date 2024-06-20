@@ -6,7 +6,7 @@ class JadwalpraktikController extends GetxController {
   RxList<JadwalPraktik> jadwalPraktik = <JadwalPraktik>[].obs;
   final box = GetStorage();
   var name = ''.obs;
-  var profileImageUrl = ''.obs; // Menambahkan variabel profileImageUrl
+  var profileImageUrl = ''.obs;
   var isLoading = true.obs;
 
   @override
@@ -23,76 +23,38 @@ class JadwalpraktikController extends GetxController {
           .map((e) => JadwalPraktik.fromJson(e as Map<String, dynamic>))
           .toList();
     } else {
-      getJadwalPraktik();
+      getJadwalPraktikFromFirestore(); // Ganti dengan panggilan Firestore
     }
   }
 
-  void fetchProfileData() async {
-    try {
-      isLoading(true);
-      DocumentSnapshot userProfile = await FirebaseFirestore.instance
-          .collection('profile')
-          .doc('38NjyRltFiX0ezjiFMUe') // ganti dengan user ID yang sesuai
-          .get();
-
-      name.value = userProfile['nama'];
-      profileImageUrl.value =
-          userProfile['profileImageUrl']; // Mengambil URL gambar profil
-    } catch (e) {
-      print(e);
-    } finally {
+  void fetchProfileData() {
+    isLoading(true);
+    FirebaseFirestore.instance
+        .collection('profile')
+        .doc('38NjyRltFiX0ezjiFMUe') // Ganti dengan user ID yang sesuai
+        .snapshots()
+        .listen((userProfile) {
+      if (userProfile.exists) {
+        name.value = userProfile['nama'];
+        profileImageUrl.value = userProfile['profileImageUrl'];
+      }
       isLoading(false);
-    }
+    });
   }
 
-  void getJadwalPraktik() {
-    List<JadwalPraktik> jadwalList = [
-      JadwalPraktik(
-        hari: 'Senin',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
-      ),
-      JadwalPraktik(
-        hari: 'Selasa',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
-      ),
-      JadwalPraktik(
-        hari: 'Rabu',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
-      ),
-      JadwalPraktik(
-        hari: 'Kamis',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
-      ),
-      JadwalPraktik(
-        hari: 'Jumat',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
-      ),
-      JadwalPraktik(
-        hari: 'Sabtu',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
-      ),
-      JadwalPraktik(
-        hari: 'Minggu',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
-      ),
-    ];
-
-    jadwalPraktik.value = jadwalList;
-    saveJadwalPraktik();
+  void getJadwalPraktikFromFirestore() {
+    FirebaseFirestore.instance
+        .collection('jadwal_praktik')
+        .snapshots()
+        .listen((querySnapshot) {
+      List<JadwalPraktik> jadwalList = [];
+      querySnapshot.docs.forEach((doc) {
+        var jadwal = JadwalPraktik.fromJson(doc.data());
+        jadwalList.add(jadwal);
+      });
+      jadwalPraktik.value = jadwalList;
+      saveJadwalPraktik(); // Simpan di GetStorage setelah mendapatkan dari Firestore
+    });
   }
 
   void saveJadwalPraktik() {

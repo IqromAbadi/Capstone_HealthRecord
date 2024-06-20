@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../controllers/rekam_medis_controller.dart';
+import 'package:intl/intl.dart'; // Add this import for date formatting
 
 class RekamMedisView extends GetView<RekamMedisController> {
   const RekamMedisView({Key? key}) : super(key: key);
@@ -15,6 +16,10 @@ class RekamMedisView extends GetView<RekamMedisController> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF01CBEF),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pushNamed(context, '/dashboard'),
+        ),
         title: const Text(
           'Rekam Medis',
           style: TextStyle(
@@ -76,6 +81,8 @@ class RekamMedisView extends GetView<RekamMedisController> {
                       itemCount: controller.filteredPasien.length,
                       itemBuilder: (context, index) {
                         var pasien = controller.filteredPasien[index];
+                        var formattedDate = DateFormat('dd-MM-yyyy – kk:mm')
+                            .format(pasien['tanggal_waktu_pemeriksaan']);
 
                         return Slidable(
                           key: Key(pasien['id']),
@@ -120,13 +127,26 @@ class RekamMedisView extends GetView<RekamMedisController> {
                                   fontSize: 13,
                                 ),
                               ),
-                              subtitle: Text(
-                                'Nama Pasien : ${pasien['nama_pasien']}',
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.black,
-                                  fontSize: 13,
-                                ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Tanggal Pemeriksaan : $formattedDate',
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Nama Pasien : ${pasien['nama_pasien']}',
+                                    style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: Colors.black,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                ],
                               ),
                               onTap: () {
                                 Get.toNamed(Routes.DETAIL_PEMERIKSAAN,

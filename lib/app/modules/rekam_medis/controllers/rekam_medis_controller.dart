@@ -20,12 +20,15 @@ class RekamMedisController extends GetxController {
     try {
       FirebaseFirestore.instance
           .collection('pemeriksaan')
+          .orderBy('tanggal_waktu_pemeriksaan', descending: true)
           .snapshots()
           .listen((querySnapshot) {
         var pasienList = querySnapshot.docs.map((doc) {
           return {
             'id': doc.id,
             'nama_pasien': doc['nama_pasien'],
+            'tanggal_waktu_pemeriksaan':
+                (doc['tanggal_waktu_pemeriksaan'] as Timestamp).toDate(),
           };
         }).toList();
         pasien.assignAll(pasienList);

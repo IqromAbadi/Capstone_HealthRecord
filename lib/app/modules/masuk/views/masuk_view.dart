@@ -120,9 +120,9 @@ class MasukView extends GetView<MasukController> {
                     Navigator.push(
                       context,
                       PageTransition(
-                        child: LupapasswordView(),
+                        child: const LupapasswordView(),
                         type: PageTransitionType.fade,
-                        duration: Duration(
+                        duration: const Duration(
                           milliseconds: 400,
                         ),
                       ),

@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AntrianpasienController extends GetxController {
   var antrianList = <Map<String, dynamic>>[].obs;
@@ -12,21 +12,20 @@ class AntrianpasienController extends GetxController {
     fetchAntrianHariIni();
   }
 
-  void fetchAntrianHariIni() async {
-    var jakartaTime = DateTime.now().toUtc().add(Duration(hours: 7));
+  void fetchAntrianHariIni() {
+    var jakartaTime = DateTime.now().toUtc().add(const Duration(hours: 7));
     var startOfDay =
         DateTime(jakartaTime.year, jakartaTime.month, jakartaTime.day, 0, 0, 0);
     var endOfDay = DateTime(
         jakartaTime.year, jakartaTime.month, jakartaTime.day, 23, 59, 59);
 
-    try {
-      var querySnapshot = await FirebaseFirestore.instance
-          .collection('antrian')
-          .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
-          .where('timestamp', isLessThanOrEqualTo: endOfDay)
-          .orderBy('timestamp')
-          .get();
-
+    FirebaseFirestore.instance
+        .collection('antrian')
+        .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
+        .where('timestamp', isLessThanOrEqualTo: endOfDay)
+        .orderBy('timestamp')
+        .snapshots()
+        .listen((querySnapshot) async {
       if (querySnapshot.docs.isNotEmpty) {
         List<Map<String, dynamic>> antrianData = [];
 
@@ -46,7 +45,6 @@ class AntrianpasienController extends GetxController {
 
               if (pasienData != null) {
                 antrian['nama_pasien'] = pasienData['nama'];
-                antrian['id'] = antrian['id'];
                 antrian['alamat_pasien'] = pasienData['alamat'];
                 antrian['telepon_pasien'] = pasienData['telepon'];
                 antrian['nik_pasien'] = pasienData['nik'];
@@ -70,9 +68,7 @@ class AntrianpasienController extends GetxController {
         antrianList.clear();
         originalAntrianList.clear();
       }
-    } catch (e) {
-      print('Error saat mengambil data antrian: $e');
-    }
+    });
   }
 
   void searchPasien(String searchText) async {
@@ -141,7 +137,6 @@ class AntrianpasienController extends GetxController {
             .update({
           'status': status,
         });
-        fetchAntrianHariIni(); // Refresh antrian list after update
       } else {
         print('Error: antrianId is null or invalid');
       }
@@ -164,7 +159,7 @@ class AntrianpasienController extends GetxController {
                 children: [
                   DropdownButton<String>(
                     value: dropdownValue,
-                    dropdownColor: Color.fromARGB(255, 1, 203, 239),
+                    dropdownColor: const Color.fromARGB(255, 1, 203, 239),
                     items: <String>['Belum Dilayani', 'Sudah Dilayani']
                         .map((String value) {
                       return DropdownMenuItem<String>(
@@ -178,7 +173,7 @@ class AntrianpasienController extends GetxController {
                       });
                     },
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -188,24 +183,26 @@ class AntrianpasienController extends GetxController {
                           updateAntrianStatus(antrianId, dropdownValue);
                           Get.back();
                         },
-                        child: Text(
+                        child: const Text(
                           'Validasi',
                           style: TextStyle(color: Colors.black),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 1, 203, 239),
+                          backgroundColor:
+                              const Color.fromARGB(255, 1, 203, 239),
                         ),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           Get.back();
                         },
-                        child: Text(
+                        child: const Text(
                           'Batal',
                           style: TextStyle(color: Colors.black),
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 1, 203, 239),
+                          backgroundColor:
+                              const Color.fromARGB(255, 1, 203, 239),
                         ),
                       ),
                     ],

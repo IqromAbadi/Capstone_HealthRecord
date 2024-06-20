@@ -6,6 +6,7 @@ import 'package:healthrecord/app/modules/lupapassword/controllers/lupapassword_c
 import 'package:healthrecord/app/modules/masuk/controllers/masuk_controller.dart';
 import 'package:healthrecord/app/modules/onboarding/controllers/onboarding_controller.dart';
 import 'package:healthrecord/app/modules/antrianpasien/controllers/antrianpasien_controller.dart';
+import 'package:healthrecord/app/modules/tambah_pemeriksaan/controllers/tambah_pemeriksaan_controller.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -24,6 +25,7 @@ void main() async {
   Get.put(LupapasswordController());
   Get.put(OnboardingController());
   Get.put(AntrianpasienController());
+  Get.put(TambahPemeriksaanController());
   runApp(
     ScreenUtilInit(
       designSize: const Size(450, 975),

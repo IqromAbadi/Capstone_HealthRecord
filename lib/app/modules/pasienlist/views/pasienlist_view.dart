@@ -11,26 +11,31 @@ class PasienlistView extends GetView<PasienlistController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Daftar Pasien'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Get.offNamed(Routes.DASHBOARD);
-          },
-          icon: Icon(Icons.arrow_back_ios),
+        backgroundColor: const Color(0xFF01CBEF),
+        title: const Text(
+          'Data Pasien',
+          style: TextStyle(
+            fontFamily: 'Poppins-Medium',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
         ),
+        centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1),
+                  side: const BorderSide(width: 1),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -38,12 +43,12 @@ class PasienlistView extends GetView<PasienlistController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(width: 10),
-                  Icon(Icons.search),
+                  const SizedBox(width: 10),
+                  const Icon(Icons.search),
                   Expanded(
                     child: TextField(
                       controller: controller.searchTextController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: "Cari Pasien",
                       ),
@@ -55,9 +60,8 @@ class PasienlistView extends GetView<PasienlistController> {
             Expanded(
               child: Obx(() {
                 if (controller.filteredPasienList.isEmpty) {
-                  return Center(child: Text("No data found"));
+                  return const Center(child: Text("Tidak ada data"));
                 }
-
                 return ListView.builder(
                   itemCount: controller.filteredPasienList.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -66,52 +70,54 @@ class PasienlistView extends GetView<PasienlistController> {
                       key: ValueKey(pasien['id']),
                       endActionPane: ActionPane(
                         extentRatio: 0.25,
-                        motion: ScrollMotion(),
+                        motion: const ScrollMotion(),
                         children: [
-                          SlidableAction(
-                            onPressed: (context) {
-                              Get.dialog(
-                                AlertDialog(
-                                  title: Text('Konfirmasi'),
-                                  content: Text(
-                                      'Apakah Anda yakin ingin menghapus data pasien ini?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      child: Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        controller.deletePasien(pasien['id']);
-                                        Get.back();
-                                      },
-                                      child: Text('Ya'),
-                                    ),
-                                  ],
+                          Flexible(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SlidableAction(
+                                  onPressed: (context) {
+                                    Get.toNamed(Routes.EDITPASIEN,
+                                        arguments: {'pasienId': pasien['id']});
+                                  },
+                                  icon: Icons.edit_outlined,
                                 ),
-                              );
-                            },
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          ),
-                          SlidableAction(
-                            onPressed: (context) {
-                              Get.toNamed(Routes.EDITPASIEN,
-                                  arguments: {'pasienId': pasien['id']});
-                            },
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            icon: Icons.edit,
-                            label: 'Edit',
+                                SlidableAction(
+                                  onPressed: (context) {
+                                    Get.dialog(
+                                      AlertDialog(
+                                        title: const Text('Konfirmasi'),
+                                        content: const Text(
+                                            'Apakah Anda yakin ingin menghapus data pasien ini?'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Get.back();
+                                            },
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              controller
+                                                  .deletePasien(pasien['id']);
+                                              Get.back();
+                                            },
+                                            child: const Text('Ya'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  icon: Icons.delete_outline,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                       child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
                         child: InkWell(
                           onTap: () {
                             Get.toNamed(Routes.DETAILPASIEN,
@@ -119,7 +125,7 @@ class PasienlistView extends GetView<PasienlistController> {
                           },
                           child: MyCard(
                             name: pasien['nama'],
-                            title: pasien['alamat'],
+                            title: pasien['id'],
                             phoneNumber: pasien['telpon'],
                             controller: controller,
                           ),
@@ -164,7 +170,8 @@ class MyCard extends StatelessWidget {
   final String phoneNumber;
   final PasienlistController controller;
 
-  MyCard({
+  const MyCard({
+    super.key,
     required this.name,
     required this.title,
     required this.phoneNumber,
@@ -174,37 +181,38 @@ class MyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: 80,
       decoration: ShapeDecoration(
-        color: Color.fromARGB(255, 1, 203, 239),
+        color: const Color.fromARGB(255, 1, 203, 239),
         shape: RoundedRectangleBorder(
-          side: BorderSide(width: 1, color: Color(0xFFEFEFEF)),
+          side: const BorderSide(width: 1, color: Color(0xFFEFEFEF)),
           borderRadius: BorderRadius.circular(15),
         ),
       ),
       child: Row(
         children: [
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 15),
-                Text(
-                  name,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 4),
+                const SizedBox(height: 10),
                 Text(
                   title,
                   style: TextStyle(fontSize: 14, color: Colors.grey[700]),
                 ),
+                Text(
+                  name,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
               ],
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: InkWell(
               onTap: () {
                 controller.openWhatsApp(phoneNumber);
@@ -215,7 +223,7 @@ class MyCard extends StatelessWidget {
                 decoration: ShapeDecoration(
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: Color(0xFFF6F1F1)),
+                    side: const BorderSide(width: 1, color: Color(0xFFF6F1F1)),
                     borderRadius: BorderRadius.circular(20),
                   ),
                 ),

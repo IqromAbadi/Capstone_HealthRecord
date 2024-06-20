@@ -3,48 +3,28 @@ import 'package:get/get.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
-  const DashboardView({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 28),
-          child: Column(
-            children: [
-              headerSection(context),
-              imageSection(),
-              menuSection(context),
-              patientStatusSection(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget headerSection(BuildContext context) {
-    return Container(
-      color: Color(0xFF01CBEF),
-      padding: EdgeInsets.fromLTRB(20, 20, 28.1, 18),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+    return WillPopScope(
+      onWillPop: controller.onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color(0xFF01CBEF),
+          title: Row(
             children: [
               Obx(() => CircleAvatar(
                     backgroundImage: controller.profileImageUrl.value.isNotEmpty
                         ? NetworkImage(controller.profileImageUrl.value)
-                        : AssetImage('assets/images/vector.png')
+                        : const AssetImage('assets/images/vector.png')
                             as ImageProvider,
                     radius: 20,
                   )),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Selamat Datang',
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -55,7 +35,7 @@ class DashboardView extends GetView<DashboardController> {
                   ),
                   Obx(() => Text(
                         controller.name.value,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
@@ -66,80 +46,104 @@ class DashboardView extends GetView<DashboardController> {
               ),
             ],
           ),
-          PopupMenuButton(
-            itemBuilder: (BuildContext context) {
-              return [
-                PopupMenuItem(
-                  child: Text('Profil Saya'),
-                  value: 'Profil Saya',
-                ),
-                PopupMenuItem(
-                  child: Text('Faq'),
-                  value: 'Faq',
-                ),
-                PopupMenuItem(
-                  child: Text('Keluar'),
-                  value: 'Keluar',
-                ),
-              ];
-            },
-            onSelected: (value) {
-              // Handle ketika salah satu pilihan dipilih
-              switch (value) {
-                case 'Profil Saya':
-                  Navigator.pushNamed(
-                      context, '/profile'); // Navigasi ke halaman Profil
-                  break;
-                case 'Faq':
-                  Navigator.pushNamed(
-                      context, '/faq'); // Navigasi ke halaman FAQ
-                  break;
-                case 'Keluar':
-                  Navigator.pushNamed(context,
-                      '/masuk'); // Navigasi ke halaman Login atau keluar
-                  break;
-                default:
-              }
-            },
-            icon: Icon(
-              Icons.more_vert,
-              color: const Color.fromARGB(255, 241, 90, 90),
+          actions: [
+            PopupMenuButton(
+              color: const Color(0xFF807D7D),
+              iconColor: Colors.white,
+              itemBuilder: (BuildContext context) {
+                return [
+                  const PopupMenuItem(
+                    child: Text(
+                      'Profil Saya',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    value: 'Profil Saya',
+                  ),
+                  const PopupMenuItem(
+                    child: Text(
+                      'Faq',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    value: 'Faq',
+                  ),
+                  const PopupMenuItem(
+                    child: Text(
+                      'Keluar',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    value: 'Keluar',
+                  ),
+                ];
+              },
+              onSelected: (value) {
+                // Handle ketika salah satu pilihan dipilih
+                switch (value) {
+                  case 'Profil Saya':
+                    Navigator.pushNamed(
+                        context, '/profile'); // Navigasi ke halaman Profil
+                    break;
+                  case 'Faq':
+                    Navigator.pushNamed(
+                        context, '/faq'); // Navigasi ke halaman FAQ
+                    break;
+                  case 'Keluar':
+                    controller.logout(); // Panggil fungsi logout di controller
+                    break;
+                  default:
+                }
+              },
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 28),
+            child: Column(
+              children: [
+                imageSection(),
+                menuSection(context),
+                patientStatusSection(),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
 
   Widget imageSection() {
     return Container(
-      margin: EdgeInsets.fromLTRB(19, 0, 19, 22),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+      margin: const EdgeInsets.fromLTRB(19, 20, 19, 22),
       height: 136,
-      child: PageView(
-        children: [
-          Image.asset(
-            'assets/images/ruang1.jpg',
-            fit: BoxFit.cover,
-          ),
-          Image.asset(
-            'assets/images/ruang2.jpg',
-            fit: BoxFit.cover,
-          ),
-          Image.asset(
-            'assets/images/ruang3.jpg',
-            fit: BoxFit.cover,
-          ),
-        ],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: PageView(
+          children: [
+            Image.asset(
+              'assets/images/ruang1.jpg',
+              fit: BoxFit.cover,
+            ),
+            Image.asset(
+              'assets/images/ruang2.jpg',
+              fit: BoxFit.cover,
+            ),
+            Image.asset(
+              'assets/images/ruang3.jpg',
+              fit: BoxFit.cover,
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget menuSection(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(19, 0, 19, 18),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.fromLTRB(19, 0, 19, 18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0x9901CBEF),
+        color: const Color(0x9901CBEF),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -164,7 +168,7 @@ class DashboardView extends GetView<DashboardController> {
               ),
             ],
           ),
-          SizedBox(height: 22.4),
+          const SizedBox(height: 22.4),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -193,12 +197,12 @@ class DashboardView extends GetView<DashboardController> {
     return Column(
       children: [
         Container(
-          margin: EdgeInsets.only(bottom: 14.2),
+          margin: const EdgeInsets.only(bottom: 14.2),
           width: 121.4,
           height: 117.8,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Color(0xFFC4C4C4),
+            color: const Color(0xFFC4C4C4),
             image: DecorationImage(
               fit: BoxFit.contain,
               image: AssetImage(imagePath),
@@ -207,7 +211,7 @@ class DashboardView extends GetView<DashboardController> {
         ),
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w500,
             fontSize: 12,
@@ -220,7 +224,7 @@ class DashboardView extends GetView<DashboardController> {
 
   Widget patientStatusSection() {
     return Container(
-      margin: EdgeInsets.fromLTRB(19, 0, 19, 18),
+      margin: const EdgeInsets.fromLTRB(19, 0, 19, 18),
       child: Column(
         children: [
           Obx(() => patientStatusItem(
@@ -238,26 +242,26 @@ class DashboardView extends GetView<DashboardController> {
 
   Widget patientStatusItem(String title, String count, String imagePath) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Color(0x9901CBEF),
+        color: const Color(0x9901CBEF),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3), // changes position of shadow
+            offset: const Offset(0, 3), // changes position of shadow
           ),
         ],
       ),
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.only(right: 16),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.all(10),
+            decoration: const BoxDecoration(
               color: Color(0xFFC4C4C4),
               shape: BoxShape.circle,
             ),
@@ -272,7 +276,7 @@ class DashboardView extends GetView<DashboardController> {
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
@@ -281,7 +285,7 @@ class DashboardView extends GetView<DashboardController> {
               ),
               Text(
                 count,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w400,
                   fontSize: 12,

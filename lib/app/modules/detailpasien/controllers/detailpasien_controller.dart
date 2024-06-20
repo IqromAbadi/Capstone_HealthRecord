@@ -68,13 +68,17 @@ class DetailpasienController extends GetxController {
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      Get.snackbar('Sukses', 'Antrian berhasil ditambahkan',
-          backgroundColor: Colors.green);
+      Get.snackbar(
+        'Sukses',
+        'Antrian berhasil ditambahkan',
+      );
 
       Get.toNamed(Routes.ANTRIANPASIEN);
     } catch (e) {
-      Get.snackbar('Error', 'Gagal menambahkan antrian: $e',
-          backgroundColor: Colors.red);
+      Get.snackbar(
+        'Error',
+        'Gagal menambahkan antrian: $e',
+      );
     }
   }
 

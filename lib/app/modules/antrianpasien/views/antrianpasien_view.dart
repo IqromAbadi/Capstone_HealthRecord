@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthrecord/app/routes/app_pages.dart';
+import 'package:healthrecord/app/modules/tambah_pemeriksaan/views/tambah_pemeriksaan_view.dart';
 import '../controllers/antrianpasien_controller.dart';
 
 class AntrianpasienView extends StatelessWidget {
@@ -10,26 +10,31 @@ class AntrianpasienView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Antrian Pasien'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Get.offNamed(Routes.PASIENLIST);
-          },
-          icon: Icon(Icons.arrow_back_ios),
+        backgroundColor: const Color(0xFF01CBEF),
+        title: const Text(
+          'Antrian Pasien',
+          style: TextStyle(
+            fontFamily: 'Poppins-Medium',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+          ),
         ),
+        centerTitle: true,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(
+              height: 10,
+            ),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40,
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1),
+                  side: const BorderSide(width: 1),
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
@@ -37,8 +42,8 @@ class AntrianpasienView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(width: 10),
-                  Icon(Icons.search),
+                  const SizedBox(width: 10),
+                  const Icon(Icons.search),
                   Expanded(
                     child: TextField(
                       onChanged: (value) {
@@ -48,7 +53,7 @@ class AntrianpasienView extends StatelessWidget {
                           controller.clearSearch();
                         }
                       },
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         hintText: "Cari Pasien",
                       ),
@@ -60,14 +65,15 @@ class AntrianpasienView extends StatelessWidget {
             Expanded(
               child: Obx(() {
                 if (controller.antrianList.isEmpty) {
-                  return Center(child: Text("Tidak ada antrian hari ini"));
+                  return const Center(
+                      child: Text("Tidak ada antrian hari ini"));
                 } else {
                   return ListView.builder(
                     itemCount: controller.antrianList.length,
                     itemBuilder: (BuildContext context, int index) {
                       var antrian = controller.antrianList[index];
                       return Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
                         child: InkWell(
                           onTap: () {
                             controller.showStatusDialog(
@@ -108,66 +114,98 @@ class MyCard extends StatelessWidget {
   });
 
   @override
+  @override
   Widget build(BuildContext context) {
     bool belumDilayani = status == 'Belum Dilayani';
 
     return Container(
-      height: 100,
+      height: 120, // Increase the height to accommodate the new row
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       decoration: BoxDecoration(
         color: belumDilayani
-            ? Color.fromARGB(
-                128, 1, 203, 239) // Warna transparan jika Belum Dilayani
-            : Color.fromARGB(
-                255, 1, 203, 239), // Warna utama jika sudah dilayani
+            ? const Color(0xFF01CBEF)
+            : const Color.fromARGB(255, 223, 73, 73),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(width: 1, color: Color(0xFFEFEFEF)),
+        border: Border.all(width: 1, color: const Color(0xFFEFEFEF)),
       ),
-      child: Row(
+      child: Column(
         children: [
-          SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 15),
-                Text(
-                  name,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      name,
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontFamily: "Poppins",
+                        fontSize: 14,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: 4),
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: InkWell(
-              onTap: () {},
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
-                height: 26,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(width: 1, color: Color(0xFFF6F1F1)),
-                ),
-                child: Center(
-                  child: Text(
-                    "No Antrian : $nomor",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
+              ),
+              const SizedBox(width: 20),
+              InkWell(
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  height: 26,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    border:
+                        Border.all(width: 1, color: const Color(0xFFF6F1F1)),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "No Antrian : $nomor",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
               ),
+            ],
+          ),
+          GestureDetector(
+            onTap: () {
+              // Navigate to the Pemeriksaan page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TambahPemeriksaanView()),
+              );
+            },
+            child: Row(
+              children: [
+                Icon(Icons.medical_services_outlined),
+                SizedBox(width: 8),
+                Text(
+                  "Pemeriksaan",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
         ],

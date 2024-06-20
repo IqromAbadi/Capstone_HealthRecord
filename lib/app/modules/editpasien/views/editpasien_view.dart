@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthrecord/app/routes/app_pages.dart';
 import '../controllers/editpasien_controller.dart';
 
 class EditPasienView extends GetView<EditpasienController> {
@@ -15,9 +14,9 @@ class EditPasienView extends GetView<EditpasienController> {
     if (pasienId == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Error'),
+          title: const Text('Error'),
         ),
-        body: Center(
+        body: const Center(
           child: Text('Error: Pasien ID is null'),
         ),
       );
@@ -35,12 +34,6 @@ class EditPasienView extends GetView<EditpasienController> {
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Get.offNamed(Routes.PASIENLIST);
-          },
-          icon: Icon(Icons.arrow_back_ios),
         ),
         centerTitle: true,
       ),
@@ -102,7 +95,7 @@ class EditPasienView extends GetView<EditpasienController> {
                           );
                           if (picked != null) {
                             controller.tanggalLahirController.text =
-                                "${picked.day}/${picked.month}/${picked.year}";
+                                "${picked.day}-${picked.month}-${picked.year}";
                           }
                         },
                         decoration: const InputDecoration(

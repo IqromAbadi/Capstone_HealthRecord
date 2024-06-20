@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthrecord/app/routes/app_pages.dart';
 import '../controllers/detailpasien_controller.dart';
 
 class DetailpasienView extends GetView<DetailpasienController> {
@@ -15,9 +14,9 @@ class DetailpasienView extends GetView<DetailpasienController> {
     if (pasienId == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Error'),
+          title: const Text('Error'),
         ),
-        body: Center(
+        body: const Center(
           child: Text('Error: Pasien ID is null'),
         ),
       );
@@ -29,7 +28,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF01CBEF),
         title: const Text(
-          'Edit Pasien',
+          'Detail Pasien',
           style: TextStyle(
             fontFamily: 'Poppins-Medium',
             fontSize: 18,
@@ -74,7 +73,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
                             borderSide: BorderSide(color: Color(0xFF01CBEF)),
                           ),
                         ),
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         enabled: false,
                       ),
                       const SizedBox(height: 10),
@@ -87,7 +86,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
                           labelText: 'NIK',
                           labelStyle: TextStyle(color: Colors.black),
                         ),
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         enabled: false,
                       ),
                       const SizedBox(height: 10),
@@ -103,7 +102,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
                           );
                           if (picked != null) {
                             controller.tanggalLahirController.text =
-                                "${picked.day}/${picked.month}/${picked.year}";
+                                "${picked.day}-${picked.month}-${picked.year}";
                           }
                         },
                         decoration: const InputDecoration(
@@ -113,7 +112,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
                             borderSide: BorderSide(color: Color(0xFF01CBEF)),
                           ),
                         ),
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                       ),
                       const SizedBox(height: 10),
                       TextField(
@@ -125,7 +124,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
                             borderSide: BorderSide(color: Color(0xFF01CBEF)),
                           ),
                         ),
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         enabled: false,
                       ),
                       const SizedBox(height: 10),
@@ -199,7 +198,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
                           labelText: 'Alamat Lengkap Pasien',
                           labelStyle: TextStyle(color: Colors.black),
                         ),
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         enabled: false,
                       ),
                       const SizedBox(height: 10),
@@ -209,7 +208,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
                           labelText: 'Nomor Telephone',
                           labelStyle: TextStyle(color: Colors.black),
                         ),
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         enabled: false,
                       ),
                     ],
@@ -225,14 +224,14 @@ class DetailpasienView extends GetView<DetailpasienController> {
                   width: MediaQuery.of(context).size.width,
                   height: 47,
                   decoration: ShapeDecoration(
-                    color: Color(0xFF01CBEF),
+                    color: const Color(0xFF01CBEF),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5)),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       'Tambah Antrian Pasien',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                         fontFamily: 'Inter',

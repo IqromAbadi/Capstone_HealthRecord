@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:healthrecord/app/routes/app_pages.dart';
 
 class MasukController extends GetxController {
@@ -28,27 +29,17 @@ class MasukController extends GetxController {
       Get.offAllNamed(Routes.DASHBOARD);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'too-many-requests') {
-        Get.snackbar(
-          'Error',
-          'Terlalu banyak permintaan. Coba lagi nanti.',
-        );
+        Get.snackbar('Error', 'Terlalu banyak permintaan. Coba lagi nanti.');
       } else if (e.code == 'wrong-password') {
-        Get.snackbar(
-          'Error',
-          'Password yang anda masukan salah.',
-        );
+        Get.snackbar('Error', 'Password yang anda masukan salah.');
       } else {
         Get.snackbar(
-          'Error',
-          'Terjadi kesalahan saat login. Silakan coba lagi nanti.',
-        );
+            'Error', 'Terjadi kesalahan saat login. Silakan coba lagi nanti.');
         print(e);
       }
     } catch (e) {
       Get.snackbar(
-        'Error',
-        'Terjadi kesalahan saat login. Silakan coba lagi nanti.',
-      );
+          'Error', 'Terjadi kesalahan saat login. Silakan coba lagi nanti.');
       print(e);
     }
   }

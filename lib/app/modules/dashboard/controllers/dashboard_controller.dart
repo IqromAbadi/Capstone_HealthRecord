@@ -1,8 +1,12 @@
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:healthrecord/app/modules/antrianpasien/controllers/antrianpasien_controller.dart';
 
 class DashboardController extends GetxController {
+  DateTime? currentBackPressTime;
+  final String exitWarning = "Tekan lagi untuk keluar";
   var sudahTerdaftarCount = '0 Pasien'.obs;
   var belumDilayaniCount = '0 Pasien'.obs;
   var sudahDilayaniCount = '0 Pasien'.obs;
@@ -15,21 +19,39 @@ class DashboardController extends GetxController {
     super.onInit();
     fetchPatientStatus();
     fetchProfileData();
-    ; // Tambahkan ini
     updateCounts();
+    fetchSudahTerdaftarCount(); // Panggil fungsi fetchSudahTerdaftarCount di sini
+  }
+
+  Future<bool> onWillPop() async {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      Fluttertoast.showToast(
+          msg: exitWarning); // Menampilkan pesan dengan Fluttertoast
+      return Future.value(false);
+    }
+    return Future.value(true);
   }
 
   void fetchProfileData() async {
     try {
       isLoading(true);
-      DocumentSnapshot userProfile = await FirebaseFirestore.instance
+      DocumentReference docRef = FirebaseFirestore.instance
           .collection('profile')
-          .doc('38NjyRltFiX0ezjiFMUe') // ganti dengan user ID yang sesuai
-          .get();
+          .doc('38NjyRltFiX0ezjiFMUe'); // ganti dengan user ID yang sesuai
 
-      name.value = userProfile['nama'];
-      profileImageUrl.value =
-          userProfile['profileImageUrl']; // Mengambil URL gambar profil
+      // Menggunakan snapshots agar data bisa otomatis berubah
+      docRef.snapshots().listen((DocumentSnapshot snapshot) {
+        if (snapshot.exists) {
+          name.value = snapshot['nama'];
+          profileImageUrl.value = snapshot['profileImageUrl'];
+        } else {
+          print('Document does not exist');
+          // Tambahkan logika atau handling untuk kasus ketika dokumen tidak ada
+        }
+      });
     } catch (e) {
       print(e);
     } finally {
@@ -37,49 +59,49 @@ class DashboardController extends GetxController {
     }
   }
 
-  void fetchPatientStatus() async {
-    var jakartaTime = DateTime.now().toUtc().add(Duration(hours: 7));
+  void fetchPatientStatus() {
+    var jakartaTime = DateTime.now().toUtc().add(const Duration(hours: 7));
     var startOfDay =
         DateTime(jakartaTime.year, jakartaTime.month, jakartaTime.day, 0, 0, 0);
     var endOfDay = DateTime(
         jakartaTime.year, jakartaTime.month, jakartaTime.day, 23, 59, 59);
 
-    try {
-      var antrianCollection = FirebaseFirestore.instance.collection('antrian');
+    var antrianCollection = FirebaseFirestore.instance.collection('antrian');
 
-      var belumDilayaniQuery = await antrianCollection
-          .where('status', isEqualTo: 'Belum Dilayani')
-          .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
-          .where('timestamp', isLessThanOrEqualTo: endOfDay)
-          .orderBy('timestamp')
-          .get();
-      belumDilayaniCount.value = '${belumDilayaniQuery.size} Pasien';
+    antrianCollection
+        .where('status', isEqualTo: 'Belum Dilayani')
+        .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
+        .where('timestamp', isLessThanOrEqualTo: endOfDay)
+        .orderBy('timestamp')
+        .snapshots()
+        .listen((querySnapshot) {
+      belumDilayaniCount.value = '${querySnapshot.size} Pasien';
+    });
 
-      var sudahDilayaniQuery = await antrianCollection
-          .where('status', isEqualTo: 'Sudah Dilayani')
-          .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
-          .where('timestamp', isLessThanOrEqualTo: endOfDay)
-          .orderBy('timestamp')
-          .get();
-      sudahDilayaniCount.value = '${sudahDilayaniQuery.size} Pasien';
+    antrianCollection
+        .where('status', isEqualTo: 'Sudah Dilayani')
+        .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
+        .where('timestamp', isLessThanOrEqualTo: endOfDay)
+        .orderBy('timestamp')
+        .snapshots()
+        .listen((querySnapshot) {
+      sudahDilayaniCount.value = '${querySnapshot.size} Pasien';
+    });
 
+    antrianCollection
+        .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
+        .where('timestamp', isLessThanOrEqualTo: endOfDay)
+        .snapshots()
+        .listen((querySnapshot) {
       var pasienTerdaftarHariIni = <String>{};
-      var antrianQuery = await antrianCollection
-          .where('timestamp', isGreaterThanOrEqualTo: startOfDay)
-          .where('timestamp', isLessThanOrEqualTo: endOfDay)
-          .get();
-
-      antrianQuery.docs.forEach((antrianDoc) {
+      querySnapshot.docs.forEach((antrianDoc) {
         var pasienId = antrianDoc['pasien_id'];
         if (pasienId != null) {
           pasienTerdaftarHariIni.add(pasienId);
         }
       });
-
       sudahTerdaftarCount.value = '${pasienTerdaftarHariIni.length} Pasien';
-    } catch (e) {
-      print('Error fetching patient status: $e');
-    }
+    });
   }
 
   void updateCounts() {
@@ -102,5 +124,22 @@ class DashboardController extends GetxController {
       belumDilayaniCount.value = '$belumDilayani Pasien';
       sudahDilayaniCount.value = '$sudahDilayani Pasien';
     });
+  }
+
+  void fetchSudahTerdaftarCount() {
+    try {
+      var pasienCollection = FirebaseFirestore.instance.collection('pasien');
+
+      pasienCollection.snapshots().listen((querySnapshot) {
+        sudahTerdaftarCount.value = '${querySnapshot.size} Pasien';
+      });
+    } catch (e) {
+      print('Error fetching sudah terdaftar count: $e');
+    }
+  }
+
+  void logout() async {
+    await FirebaseAuth.instance.signOut();
+    Get.offAllNamed('/masuk'); // Mengarahkan ke halaman login setelah logout
   }
 }

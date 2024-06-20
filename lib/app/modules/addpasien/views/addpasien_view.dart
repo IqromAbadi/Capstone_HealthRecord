@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthrecord/app/routes/app_pages.dart';
 import '../controllers/addpasien_controller.dart';
 
 class AddpasienView extends GetView<AddpasienController> {
@@ -20,12 +19,6 @@ class AddpasienView extends GetView<AddpasienController> {
             fontSize: 18,
             fontWeight: FontWeight.w700,
           ),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Get.offNamed(Routes.PASIENLIST);
-          },
-          icon: Icon(Icons.arrow_back_ios),
         ),
         centerTitle: true,
       ),

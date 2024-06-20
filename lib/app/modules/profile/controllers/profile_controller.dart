@@ -14,22 +14,23 @@ class ProfileController extends GetxController {
     fetchProfileData();
   }
 
-  void fetchProfileData() async {
+  void fetchProfileData() {
     try {
       isLoading(true);
-      DocumentSnapshot userProfile = await FirebaseFirestore.instance
+
+      FirebaseFirestore.instance
           .collection('profile')
           .doc('38NjyRltFiX0ezjiFMUe') // ganti dengan user ID yang sesuai
-          .get();
-
-      name.value = userProfile['nama'];
-      email.value = userProfile['email'];
-      phoneNumber.value = userProfile['no_hp'];
-      profileImageUrl.value =
-          userProfile['profileImageUrl']; // Mengambil URL gambar profil
+          .snapshots()
+          .listen((DocumentSnapshot userProfile) {
+        name.value = userProfile['nama'];
+        email.value = userProfile['email'];
+        phoneNumber.value = userProfile['no_hp'];
+        profileImageUrl.value = userProfile['profileImageUrl'];
+        isLoading(false);
+      });
     } catch (e) {
       print(e);
-    } finally {
       isLoading(false);
     }
   }
