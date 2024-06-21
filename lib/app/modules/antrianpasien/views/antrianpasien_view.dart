@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:healthrecord/app/routes/app_pages.dart';
 import '../controllers/antrianpasien_controller.dart';
 
 class AntrianpasienView extends StatelessWidget {
@@ -75,11 +76,15 @@ class AntrianpasienView extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         child: InkWell(
                           onTap: () {
-                            controller.showStatusDialog(
-                                antrian['id'].toString(), antrian['status']);
+                            Get.toNamed(Routes.TAMBAH_PEMERIKSAAN,
+                                arguments: {
+                                  'pasienId': antrian['pasien_id'],
+                                  'antrianId': antrian['id'],
+                                });
                           },
                           child: MyCard(
                             name: antrian['pasien_id'],
+                            id: antrian['id'],
                             title:
                                 antrian['nama_pasien'] ?? 'Nama tidak tersedia',
                             nomor: antrian['no_antrian'].toString(),
@@ -100,16 +105,20 @@ class AntrianpasienView extends StatelessWidget {
 }
 
 class MyCard extends StatelessWidget {
+  final AntrianpasienController controller = Get.put(AntrianpasienController());
+
   final String name;
   final String title;
   final String nomor;
   final String status;
+  final String id;
 
   MyCard({
     required this.name,
     required this.title,
     required this.nomor,
     required this.status,
+    required this.id,
   });
 
   @override
@@ -155,7 +164,9 @@ class MyCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                controller.showStatusDialog(id, status);
+              },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 height: 26,

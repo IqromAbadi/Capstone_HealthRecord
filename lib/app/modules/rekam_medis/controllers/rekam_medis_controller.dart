@@ -8,6 +8,7 @@ class RekamMedisController extends GetxController {
   var searchTextController = TextEditingController();
   var isLoading = true.obs; // Loading state
 
+
   @override
   void onInit() {
     super.onInit();
@@ -62,4 +63,6 @@ class RekamMedisController extends GetxController {
       Get.snackbar('Error', 'Gagal Hapus Data: $e');
     }
   }
+
+ 
 }

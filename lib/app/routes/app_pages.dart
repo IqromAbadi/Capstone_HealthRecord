@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:healthrecord/app/modules/tambah_pemeriksaan/views/tambah_pemeriksaannew.dart';
 
 import '../modules/addpasien/bindings/addpasien_binding.dart';
 import '../modules/addpasien/views/addpasien_view.dart';
@@ -140,6 +141,11 @@ class AppPages {
     GetPage(
       name: _Paths.TAMBAH_PEMERIKSAAN,
       page: () => const TambahPemeriksaanView(),
+      binding: TambahPemeriksaanBinding(),
+    ),
+    GetPage(
+      name: _Paths.TAMBAH_PEMERIKSAANNEW,
+      page: () => const TambahPemeriksaanViewNew(),
       binding: TambahPemeriksaanBinding(),
     ),
   ];

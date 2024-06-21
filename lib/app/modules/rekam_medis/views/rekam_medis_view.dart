@@ -132,7 +132,7 @@ class RekamMedisView extends GetView<RekamMedisController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.toNamed(Routes.TAMBAH_PEMERIKSAAN);
+          Get.toNamed(Routes.TAMBAH_PEMERIKSAANNEW);
         },
         backgroundColor: const Color(0xFF343FF9),
         shape: const RoundedRectangleBorder(

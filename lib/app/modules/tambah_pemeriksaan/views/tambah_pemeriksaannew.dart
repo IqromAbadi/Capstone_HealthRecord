@@ -5,29 +5,13 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/tambah_pemeriksaan_controller.dart';
 
-class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
-  const TambahPemeriksaanView({Key? key}) : super(key: key);
+class TambahPemeriksaanViewNew extends GetView<TambahPemeriksaanController> {
+  const TambahPemeriksaanViewNew({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenWidth = mediaQuery.size.width;
-
-    final String? pasienId = Get.arguments['pasienId'];
-    final String? antrianId = Get.arguments['antrianId'];
-
-    if (pasienId == null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Error'),
-        ),
-        body: const Center(
-          child: Text('Error: Pasien ID is null'),
-        ),
-      );
-    }
-
-    controller.loadPasienDataIfNeeded(pasienId);
 
     return Scaffold(
       appBar: AppBar(
@@ -74,52 +58,6 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
-
-                        TextFormField(
-                          controller: controller.namaPasienController,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'poppins',
-                          ),
-                          cursorColor: Colors.black,
-                          decoration: const InputDecoration(
-                            labelText: 'Nama Pasien',
-                            labelStyle: TextStyle(
-                              fontFamily: 'poppins',
-                              fontSize: 16,
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                            ),
-                            floatingLabelStyle: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        TextFormField(
-                          controller: controller.nikController,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'poppins',
-                          ),
-                          cursorColor: Colors.black,
-                          decoration: const InputDecoration(
-                            labelText: 'NIK',
-                            labelStyle: TextStyle(
-                              fontFamily: 'poppins',
-                              fontSize: 16,
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors
-                                      .black), // Black border when focused
-                            ),
-                            floatingLabelStyle: TextStyle(
-                              color:
-                                  Colors.black, // Black label text when focused
-                            ),
-                          ),
-
                         Autocomplete<String>(
                           optionsBuilder: (TextEditingValue textEditingValue) {
                             if (textEditingValue.text == '') {
@@ -176,7 +114,6 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                               ),
                             );
                           },
-
                         ),
                         const SizedBox(height: 20),
                         Obx(() => TextFormField(
@@ -784,7 +721,7 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                             MaterialStatePropertyAll(Color(0xFF01CBEF)),
                       ),
                       onPressed: () {
-                        controller.saveData(antrianId);
+                        controller.saveData(null);
                       },
                       child: const Text(
                         'Simpan',

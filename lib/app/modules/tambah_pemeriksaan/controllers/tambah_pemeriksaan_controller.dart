@@ -24,7 +24,11 @@ class TambahPemeriksaanController extends GetxController {
   final tinggiBadanController = TextEditingController();
   final beratBadanController = TextEditingController();
 
+
+  var isDataLoaded = false.obs;
+
   // Data pasien terpilih dari dropdown
+
   final selectedPasien = RxString('');
   final selectedPasienData = Rx<Map<String, dynamic>>({});
 
@@ -192,11 +196,25 @@ class TambahPemeriksaanController extends GetxController {
     return true;
   }
 
+  // Menyimpan data ke Firestore
+  void saveData(String? antrianId) async {
+
   // Fungsi untuk simpan data ke Firestore
   void saveData() async {
+
     if (!validateFields()) {
       return;
     }
+
+    CollectionReference pemeriksaan =
+        FirebaseFirestore.instance.collection('pemeriksaan');
+    try {
+      var result = await pemeriksaan.add({
+        'nama_pasien': namaPasienController.text,
+        'nik': nikController.text,
+        'tanggal_lahir': tanggalLahirController.value != null
+            ? DateFormat('yyyy-MM-dd').format(tanggalLahirController.value!)
+            : null,
 
     try {
       // Generate next ID
@@ -210,6 +228,7 @@ class TambahPemeriksaanController extends GetxController {
         'nama_pasien': selectedPasien.value,
         'nik': nikController.text,
         'tanggal_lahir': tanggalLahirController.value,
+
         'jenis_kelamin': jenisKelaminController.value,
         'tanggal_waktu_pemeriksaan': tanggalWaktuPemeriksaanController.value,
         'kunjungan_type': kunjunganTypeController.value,
@@ -225,6 +244,50 @@ class TambahPemeriksaanController extends GetxController {
         'tinggi_badan': tinggiBadanController.text,
         'berat_badan': beratBadanController.text,
       });
+
+
+      Get.snackbar('Sukses', 'Data berhasil disimpan');
+
+      if (antrianId != null) {
+        updateAntrianStatus(antrianId);
+      } else {
+        Get.offNamed('/rekam_medis');
+      }
+    } catch (error) {
+      Get.snackbar('Error', 'Gagal menyimpan data: $error');
+    }
+  }
+
+  void updateAntrianStatus(String antrianId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('antrian')
+          .doc(antrianId)
+          .update({
+        'status': 'Sudah Dilayani',
+      });
+      Get.offNamed('/rekam_medis');
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal mengupdate status antrian: $e');
+    }
+  }
+
+  void loadPasienDataIfNeeded(String id) async {
+    if (!isDataLoaded.value) {
+      var doc =
+          await FirebaseFirestore.instance.collection('pasien').doc(id).get();
+      if (doc.exists) {
+        var data = doc.data()!;
+        namaPasienController.text = data['nama'] ?? '';
+        nikController.text = data['nik'] ?? '';
+        if (data['tanggal_lahir'] != null) {
+          tanggalLahirController.value =
+              DateFormat('yyyy-MM-dd').parse(data['tanggal_lahir']);
+        }
+        jenisKelaminController.value = data['jenis_kelamin'] ?? '';
+        isDataLoaded.value = true;
+      }
+    }
 
       // Clear semua field setelah penyimpanan data
       clearFields();
@@ -248,6 +311,7 @@ class TambahPemeriksaanController extends GetxController {
   String generateNextId() {
     String formattedId = 'RM-${nextId.toString().padLeft(6, '0')}';
     return formattedId;
+
   }
 
   void batal() {
@@ -270,7 +334,10 @@ class TambahPemeriksaanController extends GetxController {
     beratBadanController.clear();
   }
 
+
+
   // Fungsi untuk mengosongkan field
+
   void clearFields() {
     namaPasienController.clear();
     nikController.clear();
