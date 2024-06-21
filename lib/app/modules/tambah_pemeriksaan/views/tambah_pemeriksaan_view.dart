@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -74,7 +72,6 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Column(
                       children: [
-
                         TextFormField(
                           controller: controller.namaPasienController,
                           style: const TextStyle(
@@ -119,109 +116,28 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                                   Colors.black, // Black label text when focused
                             ),
                           ),
-
-                        Autocomplete<String>(
-                          optionsBuilder: (TextEditingValue textEditingValue) {
-                            if (textEditingValue.text == '') {
-                              return controller.pasienList;
-                            }
-                            return controller.pasienList.where((String option) {
-                              return option.toLowerCase().contains(
-                                  textEditingValue.text.toLowerCase());
-                            });
-                          },
-                          optionsViewBuilder: (BuildContext context,
-                              AutocompleteOnSelected<String> onSelected,
-                              Iterable<String> options) {
-                            return Align(
-                              alignment: Alignment.topLeft,
-                              child: Material(
-                                elevation: 4.0,
-                                child: SizedBox(
-                                  width: 280, // Atur lebar di sini
-                                  child: SizedBox(
-                                    height: min(50.0 * options.length, 200),
-                                    child: ListView.builder(
-                                      itemCount: options.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        final String option =
-                                            options.elementAt(index);
-                                        return GestureDetector(
-                                          onTap: () => onSelected(option),
-                                          child: ListTile(
-                                            title: Text(option),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          onSelected: (String selection) {
-                            controller.selectedPasien.value = selection;
-                            controller.loadPasienData(selection);
-                          },
-                          fieldViewBuilder: (BuildContext context,
-                              TextEditingController textEditingController,
-                              FocusNode focusNode,
-                              VoidCallback onFieldSubmitted) {
-                            return TextField(
-                              controller: textEditingController,
-                              focusNode: focusNode,
-                              decoration: const InputDecoration(
-                                hintText: 'Masukan Nama Pasien',
-                              ),
-                            );
-                          },
-
                         ),
-                        const SizedBox(height: 20),
                         Obx(() => TextFormField(
                               readOnly: true,
+                              onTap: () async {
+                                DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2100),
+                                );
+                                if (pickedDate != null) {
+                                  controller.tanggalLahirController.value =
+                                      pickedDate;
+                                }
+                              },
                               controller: TextEditingController(
-                                text: controller
-                                        .selectedPasienData.value['nik'] ??
-                                    '',
-                              ),
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'poppins',
-                              ),
-                              cursorColor: Colors.black,
-                              decoration: const InputDecoration(
-                                labelText: 'NIK',
-                                labelStyle: TextStyle(
-                                  fontFamily: 'poppins',
-                                  fontSize: 16,
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
-                                ),
-                                floatingLabelStyle:
-                                    TextStyle(color: Colors.black),
-                              ),
-                            )),
-                        Obx(() => TextFormField(
-                              readOnly: true,
-                              controller: TextEditingController(
-                                text: controller.selectedPasienData
-                                            .value['tanggal_lahir'] !=
+                                text: controller.tanggalLahirController.value !=
                                         null
-                                    ? DateFormat('dd-MM-yyyy').format(
-                                        DateFormat('dd-MM-yyyy').parse(
-                                            controller.selectedPasienData
-                                                    .value['tanggal_lahir']
-                                                as String))
+                                    ? DateFormat('dd-MM-yyyy').format(controller
+                                        .tanggalLahirController.value!)
                                     : '',
                               ),
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'poppins',
-                              ),
-                              cursorColor: Colors.black,
                               decoration: const InputDecoration(
                                 labelText: 'Tanggal Lahir',
                                 labelStyle: TextStyle(
@@ -235,30 +151,63 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                                     TextStyle(color: Colors.black),
                               ),
                             )),
-                        Obx(() => TextFormField(
-                              readOnly: true,
-                              controller: TextEditingController(
-                                text: controller.selectedPasienData
-                                        .value['jenis_kelamin'] ??
-                                    '',
+                        const SizedBox(height: 20),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Jenis Kelamin:',
+                              style: TextStyle(
+                                fontFamily: 'Poppins-Medium',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
                               ),
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'poppins',
-                              ),
-                              cursorColor: Colors.black,
-                              decoration: const InputDecoration(
-                                labelText: 'Jenis Kelamin',
-                                labelStyle: TextStyle(
-                                  fontFamily: 'poppins',
-                                  fontSize: 16,
+                            ),
+                          ],
+                        ),
+                        Obx(() => Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: Row(
+                                    children: [
+                                      Radio<String>(
+                                        value: 'Laki-laki',
+                                        groupValue: controller
+                                            .jenisKelaminController.value,
+                                        onChanged: (value) {
+                                          controller.jenisKelaminController
+                                              .value = value!;
+                                        },
+                                        fillColor:
+                                            const MaterialStatePropertyAll(
+                                                Colors.black),
+                                      ),
+                                      const Text('Laki-laki'),
+                                    ],
+                                  ),
                                 ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
+                                const SizedBox(width: 10),
+                                Flexible(
+                                  child: Row(
+                                    children: [
+                                      Radio<String>(
+                                        value: 'Perempuan',
+                                        groupValue: controller
+                                            .jenisKelaminController.value,
+                                        onChanged: (value) {
+                                          controller.jenisKelaminController
+                                              .value = value!;
+                                        },
+                                        fillColor:
+                                            const MaterialStatePropertyAll(
+                                                Colors.black),
+                                      ),
+                                      const Text('Perempuan'),
+                                    ],
+                                  ),
                                 ),
-                                floatingLabelStyle:
-                                    TextStyle(color: Colors.black),
-                              ),
+                              ],
                             )),
                       ],
                     ),
@@ -374,12 +323,9 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      const Expanded(
-                                        // Add this
-                                        child: Text(
-                                          'Kunjungan Sehat',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
+                                      const Text(
+                                        'Kunjungan Sehat',
+                                        style: TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -401,12 +347,9 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      const Expanded(
-                                        // Add this
-                                        child: Text(
-                                          'Kunjungan Sakit',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
+                                      const Text(
+                                        'Kunjungan Sakit',
+                                        style: TextStyle(fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -800,7 +743,7 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                             MaterialStatePropertyAll(Color(0xFF01CBEF)),
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
+                        controller.batal();
                       },
                       child: const Text(
                         'Batal',
