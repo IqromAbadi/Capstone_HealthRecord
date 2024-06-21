@@ -90,27 +90,25 @@ class AntrianpasienController extends GetxController {
       var pasienData = doc.data();
       var pasienId = doc.id;
 
-      if (pasienData != null) {
-        var antrianSnapshot = await FirebaseFirestore.instance
-            .collection('antrian')
-            .where('pasien_id', isEqualTo: pasienId)
-            .get();
+      var antrianSnapshot = await FirebaseFirestore.instance
+          .collection('antrian')
+          .where('pasien_id', isEqualTo: pasienId)
+          .get();
 
-        for (var antrianDoc in antrianSnapshot.docs) {
-          var antrian = antrianDoc.data();
-          antrian['id'] = antrianDoc.id;
-          antrian['nama_pasien'] = pasienData['nama'];
-          antrian['alamat_pasien'] = pasienData['alamat'];
-          antrian['telepon_pasien'] = pasienData['telepon'];
-          antrian['nik_pasien'] = pasienData['nik'];
-          antrian['jenis_kelamin_pasien'] = pasienData['jenis_kelamin'];
+      for (var antrianDoc in antrianSnapshot.docs) {
+        var antrian = antrianDoc.data();
+        antrian['id'] = antrianDoc.id;
+        antrian['nama_pasien'] = pasienData['nama'];
+        antrian['alamat_pasien'] = pasienData['alamat'];
+        antrian['telepon_pasien'] = pasienData['telepon'];
+        antrian['nik_pasien'] = pasienData['nik'];
+        antrian['jenis_kelamin_pasien'] = pasienData['jenis_kelamin'];
 
-          if (_containsSearchQuery(antrian, searchText)) {
-            antrianData.add(antrian);
-          }
+        if (_containsSearchQuery(antrian, searchText)) {
+          antrianData.add(antrian);
         }
       }
-    }
+        }
 
     antrianList.assignAll(antrianData);
   }
@@ -130,29 +128,25 @@ class AntrianpasienController extends GetxController {
 
   void updateAntrianStatus(String antrianId, String status) async {
     try {
-      if (antrianId != null) {
-        await FirebaseFirestore.instance
-            .collection('antrian')
-            .doc(antrianId)
-            .update({
-          'status': status,
-        });
-      } else {
-        print('Error: antrianId is null or invalid');
-      }
-    } catch (e) {
+      await FirebaseFirestore.instance
+          .collection('antrian')
+          .doc(antrianId)
+          .update({
+        'status': status,
+      });
+        } catch (e) {
       print('Error updating antrian status: $e');
     }
   }
 
   void showStatusDialog(String antrianId, String status) {
-    if (antrianId != null && antrianId.isNotEmpty) {
+    if (antrianId.isNotEmpty) {
       String dropdownValue = status ?? 'Belum dilayani';
       Get.defaultDialog(
         title: "Ubah Status Antrian",
         content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Container(
+            return SizedBox(
               height: 200,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -183,26 +177,26 @@ class AntrianpasienController extends GetxController {
                           updateAntrianStatus(antrianId, dropdownValue);
                           Get.back();
                         },
-                        child: const Text(
-                          'Validasi',
-                          style: TextStyle(color: Colors.black),
-                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               const Color.fromARGB(255, 1, 203, 239),
+                        ),
+                        child: const Text(
+                          'Validasi',
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           Get.back();
                         },
-                        child: const Text(
-                          'Batal',
-                          style: TextStyle(color: Colors.black),
-                        ),
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
                               const Color.fromARGB(255, 1, 203, 239),
+                        ),
+                        child: const Text(
+                          'Batal',
+                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ],

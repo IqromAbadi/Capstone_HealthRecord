@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/tambah_pemeriksaan_controller.dart';
-import 'package:dropdown_textfield/dropdown_textfield.dart';
 
 class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
   const TambahPemeriksaanView({Key? key}) : super(key: key);
@@ -78,7 +77,7 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                                 elevation: 4.0,
                                 child: SizedBox(
                                   width: 280, // Atur lebar di sini
-                                  child: Container(
+                                  child: SizedBox(
                                     height: min(50.0 * options.length, 200),
                                     child: ListView.builder(
                                       itemCount: options.length,
@@ -110,7 +109,7 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                             return TextField(
                               controller: textEditingController,
                               focusNode: focusNode,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'Masukan Nama Pasien',
                               ),
                             );
@@ -312,9 +311,9 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      Expanded(
+                                      const Expanded(
                                         // Add this
-                                        child: const Text(
+                                        child: Text(
                                           'Kunjungan Sehat',
                                           style: TextStyle(fontSize: 12),
                                         ),
@@ -339,9 +338,9 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      Expanded(
+                                      const Expanded(
                                         // Add this
-                                        child: const Text(
+                                        child: Text(
                                           'Kunjungan Sakit',
                                           style: TextStyle(fontSize: 12),
                                         ),

@@ -18,7 +18,7 @@ class SplashscreenView extends GetView<SplashscreenController> {
         (
           context,
           PageTransition(
-            child: OnboardingView(),
+            child: const OnboardingView(),
             type: PageTransitionType.fade,
             duration: const Duration(seconds: 2),
           ),
@@ -28,7 +28,7 @@ class SplashscreenView extends GetView<SplashscreenController> {
         (
           context,
           PageTransition(
-            child: DashboardView(),
+            child: const DashboardView(),
             type: PageTransitionType.fade,
             duration: const Duration(seconds: 2),
           ),

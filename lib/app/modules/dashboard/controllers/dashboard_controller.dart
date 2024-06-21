@@ -94,12 +94,12 @@ class DashboardController extends GetxController {
         .snapshots()
         .listen((querySnapshot) {
       var pasienTerdaftarHariIni = <String>{};
-      querySnapshot.docs.forEach((antrianDoc) {
+      for (var antrianDoc in querySnapshot.docs) {
         var pasienId = antrianDoc['pasien_id'];
         if (pasienId != null) {
           pasienTerdaftarHariIni.add(pasienId);
         }
-      });
+      }
       sudahTerdaftarCount.value = '${pasienTerdaftarHariIni.length} Pasien';
     });
   }

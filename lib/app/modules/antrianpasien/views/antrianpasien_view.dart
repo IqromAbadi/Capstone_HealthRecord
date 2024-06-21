@@ -6,6 +6,8 @@ import '../controllers/antrianpasien_controller.dart';
 class AntrianpasienView extends StatelessWidget {
   final AntrianpasienController controller = Get.put(AntrianpasienController());
 
+  AntrianpasienView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +108,8 @@ class MyCard extends StatelessWidget {
   final String nomor;
   final String status;
 
-  MyCard({
+  const MyCard({
+    super.key,
     required this.name,
     required this.title,
     required this.nomor,
@@ -120,7 +123,7 @@ class MyCard extends StatelessWidget {
 
     return Container(
       height: 120, // Increase the height to accommodate the new row
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       decoration: BoxDecoration(
         color: belumDilayani
             ? const Color(0xFF01CBEF)
@@ -190,10 +193,10 @@ class MyCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => TambahPemeriksaanView()),
+                    builder: (context) => const TambahPemeriksaanView()),
               );
             },
-            child: Row(
+            child: const Row(
               children: [
                 Icon(Icons.medical_services_outlined),
                 SizedBox(width: 8),

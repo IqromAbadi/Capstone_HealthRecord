@@ -64,22 +64,22 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ONBOARDING,
-      page: () => OnboardingView(),
+      page: () => const OnboardingView(),
       binding: OnboardingBinding(),
     ),
     GetPage(
       name: _Paths.DASHBOARD,
-      page: () => DashboardView(),
+      page: () => const DashboardView(),
       binding: DashboardBinding(),
     ),
     GetPage(
       name: _Paths.FAQ,
-      page: () => FaqView(),
+      page: () => const FaqView(),
       binding: FaqBinding(),
     ),
     GetPage(
       name: _Paths.JADWALPRAKTIK,
-      page: () => JadwalPraktikView(),
+      page: () => const JadwalPraktikView(),
       binding: JadwalpraktikBinding(),
     ),
     GetPage(

@@ -231,7 +231,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
                   child: const Center(
                     child: Text(
                       'Tambah Antrian Pasien',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                         fontFamily: 'Inter',

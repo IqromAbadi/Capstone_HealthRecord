@@ -48,10 +48,10 @@ class JadwalpraktikController extends GetxController {
         .snapshots()
         .listen((querySnapshot) {
       List<JadwalPraktik> jadwalList = [];
-      querySnapshot.docs.forEach((doc) {
+      for (var doc in querySnapshot.docs) {
         var jadwal = JadwalPraktik.fromJson(doc.data());
         jadwalList.add(jadwal);
-      });
+      }
       jadwalPraktik.value = jadwalList;
       saveJadwalPraktik(); // Simpan di GetStorage setelah mendapatkan dari Firestore
     });

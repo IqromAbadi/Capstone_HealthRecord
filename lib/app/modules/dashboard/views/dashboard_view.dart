@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
+  const DashboardView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -53,25 +55,25 @@ class DashboardView extends GetView<DashboardController> {
               itemBuilder: (BuildContext context) {
                 return [
                   const PopupMenuItem(
+                    value: 'Profil Saya',
                     child: Text(
                       'Profil Saya',
                       style: TextStyle(color: Colors.white),
                     ),
-                    value: 'Profil Saya',
                   ),
                   const PopupMenuItem(
+                    value: 'Faq',
                     child: Text(
                       'Faq',
                       style: TextStyle(color: Colors.white),
                     ),
-                    value: 'Faq',
                   ),
                   const PopupMenuItem(
+                    value: 'Keluar',
                     child: Text(
                       'Keluar',
                       style: TextStyle(color: Colors.white),
                     ),
-                    value: 'Keluar',
                   ),
                 ];
               },
@@ -230,11 +232,11 @@ class DashboardView extends GetView<DashboardController> {
           Obx(() => patientStatusItem(
               'Sudah Terdaftar',
               controller.sudahTerdaftarCount.value,
-              'assets/images/vector.png')),
+              'assets/images/Vector.png')),
           Obx(() => patientStatusItem('Belum Dilayani',
-              controller.belumDilayaniCount.value, 'assets/images/vector.png')),
+              controller.belumDilayaniCount.value, 'assets/images/Vector.png')),
           Obx(() => patientStatusItem('Sudah Dilayani',
-              controller.sudahDilayaniCount.value, 'assets/images/vector.png')),
+              controller.sudahDilayaniCount.value, 'assets/images/Vector.png')),
         ],
       ),
     );

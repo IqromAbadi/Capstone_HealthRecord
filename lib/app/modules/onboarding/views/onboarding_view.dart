@@ -6,7 +6,7 @@ import '../controllers/onboarding_controller.dart';
 import 'package:healthrecord/app/modules/masuk/views/masuk_view.dart';
 
 class OnboardingView extends GetView<OnboardingController> {
-  OnboardingView({Key? key}) : super(key: key);
+  const OnboardingView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
