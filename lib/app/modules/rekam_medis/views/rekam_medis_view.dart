@@ -25,123 +25,109 @@ class RekamMedisView extends GetView<RekamMedisController> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: SizedBox(
-            width: screenWidth,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 50,
-                  child: TextField(
-                    cursorColor: Colors.black,
-                    controller: controller.searchTextController,
-                    decoration: const InputDecoration(
-                      labelText: 'cari pasien',
-                      suffixIcon: Icon(Icons.search_outlined),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(20)) // Black border when focused
-                          ),
-                      floatingLabelStyle: TextStyle(
-                        color: Colors.black, // Black label text when focused
-                      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 50,
+              child: TextField(
+                cursorColor: Colors.black,
+                controller: controller.searchTextController,
+                decoration: const InputDecoration(
+                  labelText: 'Cari pasien',
+                  suffixIcon: Icon(Icons.search_outlined),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
                     ),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  floatingLabelStyle: TextStyle(
+                    color: Colors.black,
+                  ),
                 ),
-                const SizedBox(height: 20),
-                Obx(() {
-                  if (controller.isLoading.value) {
-                    return const Center(
-                      heightFactor: 50,
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (controller.filteredPasien.isEmpty) {
-                    return const Center(
-                      heightFactor: 25,
-                      child: Text('Tidak Ada Data'),
-                    );
-                  } else {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: controller.filteredPasien.length,
-                      itemBuilder: (context, index) {
-                        var pasien = controller.filteredPasien[index];
+              ),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (controller.filteredPasien.isEmpty) {
+                  return const Center(
+                    child: Text('Tidak Ada Data'),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: controller.filteredPasien.length,
+                    itemBuilder: (context, index) {
+                      var pasien = controller.filteredPasien[index];
 
-                        return Slidable(
-                          key: Key(pasien['id']),
-                          endActionPane: ActionPane(
-                            extentRatio: 0.2,
-                            motion: const ScrollMotion(),
-                            children: [
-                              Flexible(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        Get.toNamed(Routes.UBAH_PEMERIKSAAN,
-                                            arguments: pasien);
-                                      },
-                                      icon: Icons.edit_outlined,
-                                    ),
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        _confirmDeletePasien(pasien['id']);
-                                      },
-                                      icon: Icons.delete_outline,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          child: Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF01CBEF),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: ListTile(
-                              title: Text(
-                                'ID Pemeriksaan : ${pasien['id']}',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'poppins',
-                                  fontSize: 13,
-                                ),
-                              ),
-                              subtitle: Text(
-                                'Nama Pasien : ${pasien['nama_pasien']}',
-                                style: const TextStyle(
-                                  fontFamily: 'Poppins',
-                                  color: Colors.black,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              onTap: () {
-                                Get.toNamed(Routes.DETAIL_PEMERIKSAAN,
+                      return Slidable(
+                        key: Key(pasien['id']),
+                        endActionPane: ActionPane(
+                          extentRatio: 0.2,
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {
+                                Get.toNamed(Routes.UBAH_PEMERIKSAAN,
                                     arguments: pasien);
                               },
+                              icon: Icons.edit_outlined,
                             ),
+                            SlidableAction(
+                              onPressed: (context) {
+                                _confirmDeletePasien(pasien['id']);
+                              },
+                              icon: Icons.delete_outline,
+                            ),
+                          ],
+                        ),
+                        child: Container(
+                          margin: const EdgeInsets.only(bottom: 10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF01CBEF),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        );
-                      },
-                    );
-                  }
-                }),
-              ],
+                          child: ListTile(
+                            title: Text(
+                              'ID Pemeriksaan : ${pasien['id']}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'poppins',
+                                fontSize: 13,
+                              ),
+                            ),
+                            subtitle: Text(
+                              'Nama Pasien : ${pasien['nama_pasien']}',
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.black,
+                                fontSize: 13,
+                              ),
+                            ),
+                            onTap: () {
+                              Get.toNamed(Routes.DETAIL_PEMERIKSAAN,
+                                  arguments: pasien);
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              }),
             ),
-          ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -164,20 +150,23 @@ class RekamMedisView extends GetView<RekamMedisController> {
     Get.defaultDialog(
       title: 'Konfirmasi',
       titleStyle: const TextStyle(
-          fontFamily: 'Poppins',
-          color: Colors.black,
-          fontSize: 20,
-          fontWeight: FontWeight.w700),
+        fontFamily: 'Poppins',
+        color: Colors.black,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+      ),
       middleText: 'Apakah Anda yakin ingin menghapus data pasien ini?',
       middleTextStyle: const TextStyle(
-          fontFamily: 'Poppins',
-          color: Colors.black,
-          fontWeight: FontWeight.w500),
+        fontFamily: 'Poppins',
+        color: Colors.black,
+        fontWeight: FontWeight.w500,
+      ),
       actions: [
         ElevatedButton(
-          style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Color(0xFF01CBEF)),
-              fixedSize: MaterialStatePropertyAll(Size(100, 10))),
+          style: ElevatedButton.styleFrom(
+            primary: const Color(0xFF01CBEF),
+            minimumSize: const Size(100, 10),
+          ),
           onPressed: () {
             controller.deletePasien(idPasien);
             Get.back();
@@ -191,14 +180,15 @@ class RekamMedisView extends GetView<RekamMedisController> {
           ),
         ),
         ElevatedButton(
-          style: const ButtonStyle(
-              backgroundColor: MaterialStatePropertyAll(Color(0xFF01CBEF)),
-              fixedSize: MaterialStatePropertyAll(Size(100, 10))),
+          style: ElevatedButton.styleFrom(
+            primary: const Color(0xFF01CBEF),
+            minimumSize: const Size(100, 10),
+          ),
           onPressed: () {
             Get.back();
           },
           child: const Text(
-            'batal',
+            'Batal',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: Colors.black,
