@@ -30,6 +30,30 @@ class AddpasienController extends GetxController {
     return result.docs.isNotEmpty;
   }
 
+  Future<String> getNextPatientId() async {
+    // Query the collection to get the current count of documents
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('pasien')
+        .orderBy(FieldPath.documentId, descending: true)
+        .limit(1)
+        .get();
+
+    int nextId = 1; // Default next ID to start with
+
+    // If documents exist, determine the next ID based on the last document
+    if (querySnapshot.docs.isNotEmpty) {
+      String lastDocId = querySnapshot.docs.first.id;
+      List<String> parts = lastDocId.split('-');
+      int lastId = int.tryParse(parts.last) ?? 0;
+      nextId = lastId + 1;
+    }
+
+    // Format the next ID to PSN-000001 style
+    String formattedId = 'PSN-${nextId.toString().padLeft(6, '0')}';
+
+    return formattedId;
+  }
+
   Future<void> savePasien() async {
     String nik = nikController.text;
 
@@ -56,7 +80,9 @@ class AddpasienController extends GetxController {
       return;
     }
 
-    await FirebaseFirestore.instance.collection('pasien').add({
+    String patientId = await getNextPatientId();
+
+    await FirebaseFirestore.instance.collection('pasien').doc(patientId).set({
       'nama': namaLengkapController.text,
       'nik': nik,
       'tanggal_lahir': tanggalLahirController.text,
