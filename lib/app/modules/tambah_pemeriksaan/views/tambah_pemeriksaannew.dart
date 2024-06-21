@@ -172,31 +172,75 @@ class TambahPemeriksaanViewNew extends GetView<TambahPemeriksaanController> {
                                     TextStyle(color: Colors.black),
                               ),
                             )),
-                        Obx(() => TextFormField(
-                              readOnly: true,
-                              controller: TextEditingController(
-                                text: controller.selectedPasienData
-                                        .value['jenis_kelamin'] ??
-                                    '',
-                              ),
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'poppins',
-                              ),
-                              cursorColor: Colors.black,
-                              decoration: const InputDecoration(
-                                labelText: 'Jenis Kelamin',
-                                labelStyle: TextStyle(
-                                  fontFamily: 'poppins',
-                                  fontSize: 16,
+                        Obx(() => Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Flexible(
+                                  child: Row(
+                                    children: [
+                                      Radio<String>(
+                                        value: 'Laki-laki',
+                                        groupValue: controller
+                                            .jenisKelaminController.value,
+                                        onChanged: (value) {
+                                          controller.jenisKelaminController
+                                              .value = value!;
+                                        },
+                                        fillColor:
+                                            const MaterialStatePropertyAll(
+                                                Colors.black),
+                                      ),
+                                      const Text('Laki-laki'),
+                                    ],
+                                  ),
                                 ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.black),
+                                const SizedBox(width: 10),
+                                Flexible(
+                                  child: Row(
+                                    children: [
+                                      Radio<String>(
+                                        value: 'Perempuan',
+                                        groupValue: controller
+                                            .jenisKelaminController.value,
+                                        onChanged: (value) {
+                                          controller.jenisKelaminController
+                                              .value = value!;
+                                        },
+                                        fillColor:
+                                            const MaterialStatePropertyAll(
+                                                Colors.black),
+                                      ),
+                                      const Text('Perempuan'),
+                                    ],
+                                  ),
                                 ),
-                                floatingLabelStyle:
-                                    TextStyle(color: Colors.black),
-                              ),
+                              ],
                             )),
+                        // Obx(() => TextFormField(
+                        //       readOnly: true,
+                        //       controller: TextEditingController(
+                        //         text: controller.selectedPasienData
+                        //                 .value['jenis_kelamin'] ??
+                        //             '',
+                        //       ),
+                        //       style: const TextStyle(
+                        //         color: Colors.black,
+                        //         fontFamily: 'poppins',
+                        //       ),
+                        //       cursorColor: Colors.black,
+                        //       decoration: const InputDecoration(
+                        //         labelText: 'Jenis Kelamin',
+                        //         labelStyle: TextStyle(
+                        //           fontFamily: 'poppins',
+                        //           fontSize: 16,
+                        //         ),
+                        //         focusedBorder: UnderlineInputBorder(
+                        //           borderSide: BorderSide(color: Colors.black),
+                        //         ),
+                        //         floatingLabelStyle:
+                        //             TextStyle(color: Colors.black),
+                        //       ),
+                        //     )),
                       ],
                     ),
                   ),
