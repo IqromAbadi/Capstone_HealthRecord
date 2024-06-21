@@ -24,7 +24,11 @@ class TambahPemeriksaanController extends GetxController {
   final tinggiBadanController = TextEditingController();
   final beratBadanController = TextEditingController();
 
+
   var isDataLoaded = false.obs;
+
+  // Data pasien terpilih dari dropdown
+
   final selectedPasien = RxString('');
   final selectedPasienData = Rx<Map<String, dynamic>>({});
 
@@ -104,7 +108,7 @@ class TambahPemeriksaanController extends GetxController {
 
   // Fungsi untuk validasi field
   bool validateFields() {
-    if (namaPasienController.text.isEmpty ||
+    if (selectedPasien.value.isEmpty ||
         nikController.text.isEmpty ||
         tanggalLahirController.value == null ||
         jenisKelaminController.value.isEmpty ||
@@ -112,6 +116,9 @@ class TambahPemeriksaanController extends GetxController {
         kunjunganTypeController.value.isEmpty ||
         keluhanUtamaController.text.isEmpty ||
         riwayatPenyakitController.text.isEmpty ||
+        riwayatpenyakitsebelumnyaController.text.isEmpty ||
+        riwayatAlergiController.text.isEmpty ||
+        riwayatObatController.text.isEmpty ||
         tekananDarahController.text.isEmpty ||
         denyutNadiController.text.isEmpty ||
         suhuTubuhController.text.isEmpty ||
@@ -119,16 +126,6 @@ class TambahPemeriksaanController extends GetxController {
         tinggiBadanController.text.isEmpty ||
         beratBadanController.text.isEmpty) {
       Get.snackbar('Error', 'Semua field harus diisi');
-      return false;
-    }
-
-    if (!RegExp(r"^\d{16}$").hasMatch(nikController.text)) {
-      Get.snackbar('Error', 'NIK harus berisi 16 angka');
-      return false;
-    }
-
-    if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(namaPasienController.text)) {
-      Get.snackbar('Error', 'Nama pasien hanya boleh berisi huruf');
       return false;
     }
 
@@ -201,6 +198,10 @@ class TambahPemeriksaanController extends GetxController {
 
   // Menyimpan data ke Firestore
   void saveData(String? antrianId) async {
+
+  // Fungsi untuk simpan data ke Firestore
+  void saveData() async {
+
     if (!validateFields()) {
       return;
     }
@@ -214,6 +215,20 @@ class TambahPemeriksaanController extends GetxController {
         'tanggal_lahir': tanggalLahirController.value != null
             ? DateFormat('yyyy-MM-dd').format(tanggalLahirController.value!)
             : null,
+
+    try {
+      // Generate next ID
+      String idPemeriksaan = generateNextId();
+
+      // Simpan data ke Firestore
+      await FirebaseFirestore.instance
+          .collection('pemeriksaan')
+          .doc(idPemeriksaan)
+          .set({
+        'nama_pasien': selectedPasien.value,
+        'nik': nikController.text,
+        'tanggal_lahir': tanggalLahirController.value,
+
         'jenis_kelamin': jenisKelaminController.value,
         'tanggal_waktu_pemeriksaan': tanggalWaktuPemeriksaanController.value,
         'kunjungan_type': kunjunganTypeController.value,
@@ -229,6 +244,7 @@ class TambahPemeriksaanController extends GetxController {
         'tinggi_badan': tinggiBadanController.text,
         'berat_badan': beratBadanController.text,
       });
+
 
       Get.snackbar('Sukses', 'Data berhasil disimpan');
 
@@ -272,9 +288,32 @@ class TambahPemeriksaanController extends GetxController {
         isDataLoaded.value = true;
       }
     }
+
+      // Clear semua field setelah penyimpanan data
+      clearFields();
+
+      // Update counter untuk ID pemeriksaan berikutnya di Firestore
+      await FirebaseFirestore.instance
+          .collection('counters')
+          .doc('pemeriksaan')
+          .set({
+        'nextId': nextId + 1,
+      });
+
+      Get.snackbar('Sukses', 'Data berhasil disimpan');
+      Get.offAllNamed(Routes.REKAM_MEDIS);
+    } catch (e) {
+      Get.snackbar('Error', 'Gagal menyimpan data: $e');
+    }
   }
 
-  //mengosongkan field
+  // Mengenerate ID pemeriksaan berikutnya
+  String generateNextId() {
+    String formattedId = 'RM-${nextId.toString().padLeft(6, '0')}';
+    return formattedId;
+
+  }
+
   void batal() {
     namaPasienController.clear();
     nikController.clear();
@@ -294,6 +333,10 @@ class TambahPemeriksaanController extends GetxController {
     tinggiBadanController.clear();
     beratBadanController.clear();
   }
+
+
+
+  // Fungsi untuk mengosongkan field
 
   void clearFields() {
     namaPasienController.clear();
