@@ -103,10 +103,10 @@ class AddpasienView extends GetView<AddpasienController> {
                             Expanded(
                               child: RadioListTile(
                                 title: const Text(
-                                  'Laki - Laki',
+                                  'Laki-laki',
                                   style: TextStyle(fontSize: 12),
                                 ),
-                                value: 'Laki - Laki',
+                                value: 'Laki-laki',
                                 groupValue: controller.jenisKelamin.value,
                                 onChanged: (value) {
                                   controller.jenisKelamin.value =

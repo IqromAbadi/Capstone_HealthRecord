@@ -22,6 +22,7 @@ abstract class Routes {
   static const UBAH_PEMERIKSAAN = _Paths.UBAH_PEMERIKSAAN;
   static const DETAIL_PEMERIKSAAN = _Paths.DETAIL_PEMERIKSAAN;
   static const TAMBAH_PEMERIKSAAN = _Paths.TAMBAH_PEMERIKSAAN;
+  static const TAMBAH_PEMERIKSAANNEW = _Paths.TAMBAH_PEMERIKSAANNEW;
 }
 
 abstract class _Paths {
@@ -45,4 +46,5 @@ abstract class _Paths {
   static const UBAH_PEMERIKSAAN = '/ubah-pemeriksaan';
   static const DETAIL_PEMERIKSAAN = '/detail-pemeriksaan';
   static const TAMBAH_PEMERIKSAAN = '/tambah-pemeriksaan';
+  static const TAMBAH_PEMERIKSAANNEW = '/tambah-pemeriksaannew';
 }
