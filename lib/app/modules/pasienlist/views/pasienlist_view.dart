@@ -125,7 +125,7 @@ class PasienlistView extends GetView<PasienlistController> {
                           },
                           child: MyCard(
                             name: pasien['nama'],
-                            title: pasien['alamat'],
+                            title: pasien['id'],
                             phoneNumber: pasien['telpon'],
                             controller: controller,
                           ),
@@ -199,15 +199,15 @@ class MyCard extends StatelessWidget {
               children: [
                 const SizedBox(height: 10),
                 Text(
+                  title,
+                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                ),
+                Text(
                   name,
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                ),
               ],
             ),
           ),
