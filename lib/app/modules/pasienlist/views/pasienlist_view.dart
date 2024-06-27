@@ -12,6 +12,10 @@ class PasienlistView extends GetView<PasienlistController> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF01CBEF),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pushNamed(context, '/dashboard'),
+        ),
         title: const Text(
           'Data Pasien',
           style: TextStyle(
@@ -124,8 +128,8 @@ class PasienlistView extends GetView<PasienlistController> {
                                 arguments: {'pasienId': pasien['id']});
                           },
                           child: MyCard(
-                            name: pasien['nama'],
                             title: pasien['id'],
+                            name: pasien['nama'],
                             phoneNumber: pasien['telpon'],
                             controller: controller,
                           ),
@@ -200,14 +204,14 @@ class MyCard extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text(
                   title,
-                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
-                ),
-                Text(
-                  name,
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
+                Text(
+                  name,
+                  style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                ),
               ],
             ),
           ),

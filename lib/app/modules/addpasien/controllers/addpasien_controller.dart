@@ -1,6 +1,6 @@
+import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:healthrecord/app/routes/app_pages.dart';
 
 class AddpasienController extends GetxController {
@@ -30,27 +30,10 @@ class AddpasienController extends GetxController {
     return result.docs.isNotEmpty;
   }
 
-  Future<String> getNextPatientId() async {
-    // Query the collection to get the current count of documents
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('pasien')
-        .orderBy(FieldPath.documentId, descending: true)
-        .limit(1)
-        .get();
-
-    int nextId = 1; // Default next ID to start with
-
-    // If documents exist, determine the next ID based on the last document
-    if (querySnapshot.docs.isNotEmpty) {
-      String lastDocId = querySnapshot.docs.first.id;
-      List<String> parts = lastDocId.split('-');
-      int lastId = int.tryParse(parts.last) ?? 0;
-      nextId = lastId + 1;
-    }
-
-    // Format the next ID to PSN-000001 style
-    String formattedId = 'PSN-${nextId.toString().padLeft(6, '0')}';
-
+  Future<String> generatePasienId() async {
+    var snapshot = await FirebaseFirestore.instance.collection('pasien').get();
+    int totalPasien = snapshot.docs.length + 1;
+    String formattedId = 'PSN-${totalPasien.toString().padLeft(6, '0')}';
     return formattedId;
   }
 
@@ -80,12 +63,21 @@ class AddpasienController extends GetxController {
       return;
     }
 
-    String patientId = await getNextPatientId();
+    // Generate pasien_id
+    String pasienId = await generatePasienId();
 
-    await FirebaseFirestore.instance.collection('pasien').doc(patientId).set({
+    // Convert tanggal_lahir to Timestamp
+    var dateParts = tanggalLahirController.text.split('-');
+    var day = int.parse(dateParts[0]);
+    var month = int.parse(dateParts[1]);
+    var year = int.parse(dateParts[2]);
+    var timestamp = Timestamp.fromDate(DateTime(year, month, day));
+
+    await FirebaseFirestore.instance.collection('pasien').doc(pasienId).set({
+      'pasien_id': pasienId,
       'nama': namaLengkapController.text,
       'nik': nik,
-      'tanggal_lahir': tanggalLahirController.text,
+      'tanggal_lahir': timestamp,
       'tempat_lahir': tempatLahirController.text,
       'alamat': alamatLengkapController.text,
       'telpon': nomorTelephoneController.text,
@@ -106,8 +98,10 @@ class AddpasienController extends GetxController {
       lastDate: DateTime(2101),
     );
     if (picked != null) {
-      tanggalLahirController.text =
-          "${picked.day}-${picked.month}-${picked.year}";
+      // Format picked date to dd-MM-yyyy
+      String formattedDate =
+          "${picked.day.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.year.toString()}";
+      tanggalLahirController.text = formattedDate;
     }
   }
 }

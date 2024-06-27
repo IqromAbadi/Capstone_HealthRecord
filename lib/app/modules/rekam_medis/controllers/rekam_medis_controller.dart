@@ -8,7 +8,6 @@ class RekamMedisController extends GetxController {
   var searchTextController = TextEditingController();
   var isLoading = true.obs; // Loading state
 
-
   @override
   void onInit() {
     super.onInit();
@@ -21,12 +20,18 @@ class RekamMedisController extends GetxController {
     try {
       FirebaseFirestore.instance
           .collection('pemeriksaan')
+          .orderBy('tanggal_waktu_pemeriksaan', descending: true)
           .snapshots()
           .listen((querySnapshot) {
         var pasienList = querySnapshot.docs.map((doc) {
           return {
             'id': doc.id,
+            'id_pemeriksaan': doc[
+                'id_pemeriksaan'], // Pastikan ini sesuai dengan field di Firestore
             'nama_pasien': doc['nama_pasien'],
+            'tanggal_waktu_pemeriksaan':
+                (doc['tanggal_waktu_pemeriksaan'] as Timestamp).toDate(),
+            // tambahkan field lainnya sesuai kebutuhan
           };
         }).toList();
         pasien.assignAll(pasienList);
@@ -63,6 +68,4 @@ class RekamMedisController extends GetxController {
       Get.snackbar('Error', 'Gagal Hapus Data: $e');
     }
   }
-
- 
 }

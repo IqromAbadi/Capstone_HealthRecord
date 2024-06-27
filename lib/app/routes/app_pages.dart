@@ -115,7 +115,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.DETAILPASIEN,
-      page: () => const DetailpasienView(),
+      page: () => DetailpasienView(),
       binding: DetailpasienBinding(),
     ),
     GetPage(
@@ -145,7 +145,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.TAMBAH_PEMERIKSAANNEW,
-      page: () => const TambahPemeriksaanViewNew(),
+      page: () => const TambahPemeriksaanNEWView(),
       binding: TambahPemeriksaanBinding(),
     ),
   ];

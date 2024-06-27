@@ -21,7 +21,17 @@ class EditpasienController extends GetxController {
         var data = doc.data()!;
         namaLengkapController.text = data['nama'] ?? '';
         nikController.text = data['nik'] ?? '';
-        tanggalLahirController.text = data['tanggal_lahir'] ?? '';
+
+        // Handle Timestamp for tanggal_lahir
+        if (data['tanggal_lahir'] is Timestamp) {
+          var timestamp = data['tanggal_lahir'] as Timestamp;
+          var date = timestamp.toDate();
+          tanggalLahirController.text =
+              '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year.toString()}';
+        } else {
+          tanggalLahirController.text = data['tanggal_lahir'] ?? '';
+        }
+
         tempatLahirController.text = data['tempat_lahir'] ?? '';
         alamatLengkapController.text = data['alamat'] ?? '';
         nomorTelephoneController.text = data['telpon'] ?? '';
@@ -44,10 +54,20 @@ class EditpasienController extends GetxController {
 
   void updatePasien(String? id) async {
     if (id != null) {
+      // Parse tanggal_lahir to DateTime
+      var dateParts = tanggalLahirController.text.split('-');
+      var day = int.parse(dateParts[0]);
+      var month = int.parse(dateParts[1]);
+      var year = int.parse(dateParts[2]);
+      var dateTime = DateTime(year, month, day);
+
+      // Convert DateTime to Timestamp
+      var timestamp = Timestamp.fromDate(dateTime);
+
       await FirebaseFirestore.instance.collection('pasien').doc(id).update({
         'nama': namaLengkapController.text,
         'nik': nikController.text,
-        'tanggal_lahir': tanggalLahirController.text,
+        'tanggal_lahir': timestamp,
         'tempat_lahir': tempatLahirController.text,
         'alamat': alamatLengkapController.text,
         'telpon': nomorTelephoneController.text,

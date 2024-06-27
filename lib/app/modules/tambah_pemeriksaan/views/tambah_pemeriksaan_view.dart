@@ -323,9 +323,12 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      const Text(
-                                        'Kunjungan Sehat',
-                                        style: TextStyle(fontSize: 12),
+                                      Expanded(
+                                        // Add this
+                                        child: const Text(
+                                          'Kunjungan Sehat',
+                                          style: TextStyle(fontSize: 12),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -347,9 +350,12 @@ class TambahPemeriksaanView extends GetView<TambahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      const Text(
-                                        'Kunjungan Sakit',
-                                        style: TextStyle(fontSize: 12),
+                                      Expanded(
+                                        // Add this
+                                        child: const Text(
+                                          'Kunjungan Sakit',
+                                          style: TextStyle(fontSize: 12),
+                                        ),
                                       ),
                                     ],
                                   ),

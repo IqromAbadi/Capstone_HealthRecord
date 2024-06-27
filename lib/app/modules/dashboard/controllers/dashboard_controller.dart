@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart'; // Tambahkan import ini untuk menunjukkan dialog
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -141,5 +142,18 @@ class DashboardController extends GetxController {
   void logout() async {
     await FirebaseAuth.instance.signOut();
     Get.offAllNamed('/masuk'); // Mengarahkan ke halaman login setelah logout
+  }
+
+  void confirmLogout(BuildContext context) {
+    Get.defaultDialog(
+      title: "Konfirmasi Logout",
+      middleText: "Apakah Anda yakin ingin logout?",
+      textCancel: "Tidak",
+      textConfirm: "Ya",
+      confirmTextColor: Colors.white,
+      onConfirm: () {
+        logout();
+      },
+    );
   }
 }
