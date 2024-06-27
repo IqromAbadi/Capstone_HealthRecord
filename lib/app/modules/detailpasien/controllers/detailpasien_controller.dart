@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart'; // Untuk mengubah Timestamp ke format yang sesuai
 import 'package:healthrecord/app/routes/app_pages.dart';
 
 class DetailpasienController extends GetxController {
@@ -22,7 +23,17 @@ class DetailpasienController extends GetxController {
         var data = doc.data()!;
         namaLengkapController.text = data['nama'] ?? '';
         nikController.text = data['nik'] ?? '';
-        tanggalLahirController.text = data['tanggal_lahir'] ?? '';
+
+        // Handle Timestamp for tanggal_lahir
+        if (data['tanggal_lahir'] is Timestamp) {
+          var timestamp = data['tanggal_lahir'] as Timestamp;
+          var date = timestamp.toDate();
+          var formattedDate = DateFormat('dd-MM-yyyy').format(date);
+          tanggalLahirController.text = formattedDate;
+        } else {
+          tanggalLahirController.text = data['tanggal_lahir'] ?? '';
+        }
+
         tempatLahirController.text = data['tempat_lahir'] ?? '';
         alamatLengkapController.text = data['alamat'] ?? '';
         nomorTelephoneController.text = data['telpon'] ?? '';

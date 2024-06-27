@@ -9,7 +9,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
   Widget build(BuildContext context) {
     final DetailpasienController controller = Get.put(DetailpasienController());
 
-    final String? pasienId = Get.arguments['pasienId'];
+    final String? pasienId = Get.arguments?['pasienId'];
 
     if (pasienId == null) {
       return Scaffold(
@@ -141,19 +141,14 @@ class DetailpasienView extends GetView<DetailpasienController> {
                             Expanded(
                               child: RadioListTile(
                                 title: const Text(
-                                  'Laki-Laki',
+                                  'Laki - Laki',
                                   style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                  ),
+                                      fontSize: 12, color: Colors.black),
                                 ),
-                                value: 'Laki-Laki',
+                                value: 'Laki-laki',
                                 groupValue: controller.jenisKelamin.value,
+                                onChanged: null,
                                 activeColor: Colors.blue,
-                                onChanged: (value) {
-                                  controller.jenisKelamin.value =
-                                      value.toString();
-                                },
                               ),
                             ),
                             Expanded(
@@ -161,17 +156,12 @@ class DetailpasienView extends GetView<DetailpasienController> {
                                 title: const Text(
                                   'Perempuan',
                                   style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.black,
-                                  ),
+                                      fontSize: 12, color: Colors.black),
                                 ),
                                 value: 'Perempuan',
                                 activeColor: Colors.blue,
                                 groupValue: controller.jenisKelamin.value,
-                                onChanged: (value) {
-                                  controller.jenisKelamin.value =
-                                      value.toString();
-                                },
+                                onChanged: null,
                               ),
                             ),
                           ],
@@ -241,7 +231,7 @@ class DetailpasienView extends GetView<DetailpasienController> {
                   child: const Center(
                     child: Text(
                       'Tambah Antrian Pasien',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
                         fontFamily: 'Inter',

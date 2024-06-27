@@ -6,7 +6,7 @@ class JadwalpraktikController extends GetxController {
   RxList<JadwalPraktik> jadwalPraktik = <JadwalPraktik>[].obs;
   final box = GetStorage();
   var name = ''.obs;
-  var profileImageUrl = ''.obs; // Menambahkan variabel profileImageUrl
+  var profileImageUrl = ''.obs;
   var isLoading = true.obs;
 
   @override
@@ -18,6 +18,7 @@ class JadwalpraktikController extends GetxController {
 
   void loadJadwalPraktik() {
     var storedJadwal = box.read<List>('jadwalPraktik');
+    print("Jadwal Praktik dimuat: $storedJadwal"); // Logging data yang dimuat
     if (storedJadwal != null) {
       jadwalPraktik.value = storedJadwal
           .map((e) => JadwalPraktik.fromJson(e as Map<String, dynamic>))
@@ -36,8 +37,7 @@ class JadwalpraktikController extends GetxController {
         .listen((userProfile) {
       if (userProfile.exists) {
         name.value = userProfile['nama'];
-        profileImageUrl.value =
-            userProfile['profileImageUrl']; // Mengambil URL gambar profil
+        profileImageUrl.value = userProfile['profileImageUrl'];
       }
       isLoading(false);
     });
@@ -47,45 +47,31 @@ class JadwalpraktikController extends GetxController {
     List<JadwalPraktik> jadwalList = [
       JadwalPraktik(
         hari: 'Senin',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
+        waktuPraktik: [WaktuPraktik(jamPraktik: '05:30 - 21:30')],
       ),
       JadwalPraktik(
         hari: 'Selasa',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
+        waktuPraktik: [WaktuPraktik(jamPraktik: '05:30 - 21:30')],
       ),
       JadwalPraktik(
         hari: 'Rabu',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
+        waktuPraktik: [WaktuPraktik(jamPraktik: '05:30 - 21:30')],
       ),
       JadwalPraktik(
         hari: 'Kamis',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
+        waktuPraktik: [WaktuPraktik(jamPraktik: '05:30 - 21:30')],
       ),
       JadwalPraktik(
         hari: 'Jumat',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
+        waktuPraktik: [WaktuPraktik(jamPraktik: '05:30 - 21:30')],
       ),
       JadwalPraktik(
         hari: 'Sabtu',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
+        waktuPraktik: [WaktuPraktik(jamPraktik: '05:30 - 21:30')],
       ),
       JadwalPraktik(
         hari: 'Minggu',
-        waktuPraktik: [
-          WaktuPraktik(jamPraktik: '05:30 - 21:30'),
-        ],
+        waktuPraktik: [WaktuPraktik(jamPraktik: '05:30 - 21:30')],
       ),
     ];
 
@@ -96,6 +82,7 @@ class JadwalpraktikController extends GetxController {
   void saveJadwalPraktik() {
     var jadwalList = jadwalPraktik.map((e) => e.toJson()).toList();
     box.write('jadwalPraktik', jadwalList);
+    print("Jadwal Praktik disimpan: $jadwalList"); // Logging data yang disimpan
   }
 
   void updateJamPraktik(int hariIndex, int waktuIndex, String jamPraktik) {

@@ -25,7 +25,6 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Doctor Info Widget
             Obx(
               () => Container(
                 margin: const EdgeInsets.fromLTRB(1, 0, 0, 29),
@@ -86,7 +85,6 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
                 ),
               ),
             ),
-            // Header
             Container(
               margin: const EdgeInsets.only(bottom: 20),
               child: const Center(
@@ -104,7 +102,6 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
                 ),
               ),
             ),
-            // List of Schedules
             Expanded(
               child: Obx(
                 () => ListView.builder(
@@ -129,32 +126,69 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
                                 .asMap()
                                 .entries
                                 .map((entry) {
-                              int waktuIndex = entry.key;
+                              var waktuIndex = entry.key;
                               var waktu = entry.value;
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    jadwal.hari,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(waktu.jamPraktik),
-                                      IconButton(
-                                        icon: const Icon(Icons.edit),
-                                        onPressed: () {
-                                          _showEditDialog(context, hariIndex,
-                                              waktuIndex, waktu.jamPraktik);
-                                        },
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        '${jadwal.hari} - ${waktu.jamPraktik}',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
                                       ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () async {
+                                        var newJamPraktik =
+                                            await showDialog<String>(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            var controller =
+                                                TextEditingController(
+                                                    text: waktu.jamPraktik);
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'Edit Jam Praktik'),
+                                              content: TextField(
+                                                controller: controller,
+                                                decoration:
+                                                    const InputDecoration(
+                                                  labelText: 'Jam Praktik',
+                                                ),
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(null);
+                                                  },
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .pop(controller.text);
+                                                  },
+                                                  child: const Text('Save'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+
+                                        if (newJamPraktik != null) {
+                                          controller.updateJamPraktik(hariIndex,
+                                              waktuIndex, newJamPraktik);
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
                               );
                             }).toList(),
                           ),
@@ -168,33 +202,6 @@ class JadwalPraktikView extends GetView<JadwalpraktikController> {
           ],
         ),
       ),
-    );
-  }
-
-  void _showEditDialog(
-      BuildContext context, int hariIndex, int waktuIndex, String jamPraktik) {
-    TextEditingController jamController = TextEditingController();
-    jamController.text = jamPraktik;
-
-    Get.defaultDialog(
-      title: 'Edit Jam Praktik',
-      content: Column(
-        children: [
-          TextField(
-            controller: jamController,
-            decoration: const InputDecoration(labelText: 'Jam Praktik'),
-          ),
-        ],
-      ),
-      textConfirm: 'Simpan',
-      textCancel: 'Batal',
-      onConfirm: () {
-        if (jamController.text.isNotEmpty) {
-          controller.updateJamPraktik(
-              hariIndex, waktuIndex, jamController.text);
-          Get.back();
-        }
-      },
     );
   }
 }

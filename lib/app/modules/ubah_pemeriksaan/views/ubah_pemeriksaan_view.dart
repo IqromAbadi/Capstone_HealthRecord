@@ -194,7 +194,10 @@ class UbahPemeriksaanView extends GetView<UbahPemeriksaanController> {
                                                 const MaterialStatePropertyAll(
                                                     Colors.black),
                                           ),
-                                          const Text('Perempuan'),
+                                          Expanded(
+                                            // Wrap the Text widget with Expanded
+                                            child: const Text('Perempuan'),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -316,9 +319,12 @@ class UbahPemeriksaanView extends GetView<UbahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      const Text(
-                                        'Kunjungan Sehat',
-                                        style: TextStyle(fontSize: 12),
+                                      Expanded(
+                                        // Add this
+                                        child: const Text(
+                                          'Kunjungan Sehat',
+                                          style: TextStyle(fontSize: 12),
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -340,9 +346,12 @@ class UbahPemeriksaanView extends GetView<UbahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      const Text(
-                                        'Kunjungan Sakit',
-                                        style: TextStyle(fontSize: 12),
+                                      Expanded(
+                                        // Add this
+                                        child: const Text(
+                                          'Kunjungan Sakit',
+                                          style: TextStyle(fontSize: 12),
+                                        ),
                                       ),
                                     ],
                                   ),

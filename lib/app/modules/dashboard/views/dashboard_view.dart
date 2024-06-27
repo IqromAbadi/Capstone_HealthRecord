@@ -87,7 +87,7 @@ class DashboardView extends GetView<DashboardController> {
                         context, '/faq'); // Navigasi ke halaman FAQ
                     break;
                   case 'Keluar':
-                    controller.logout(); // Panggil fungsi logout di controller
+                    controller.confirmLogout(context); // Panggil fungsi logout di controller
                     break;
                   default:
                 }

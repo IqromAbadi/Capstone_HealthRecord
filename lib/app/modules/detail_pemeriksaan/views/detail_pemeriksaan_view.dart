@@ -284,7 +284,7 @@ class DetailPemeriksaanView extends GetView<DetailPemeriksaanController> {
                           () => Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Flexible(
+                              Expanded(
                                 child: Row(
                                   children: [
                                     Radio<String>(
@@ -296,15 +296,14 @@ class DetailPemeriksaanView extends GetView<DetailPemeriksaanController> {
                                           Colors.black),
                                       visualDensity: VisualDensity.compact,
                                     ),
-                                    const Text(
-                                      'Kunjungan Sehat',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
+                                    const Expanded(
+                                        child: Text('Kunjungan Sehat',
+                                            style: TextStyle(fontSize: 12))),
                                   ],
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              Flexible(
+                              Expanded(
                                 child: Row(
                                   children: [
                                     Radio<String>(
@@ -316,10 +315,9 @@ class DetailPemeriksaanView extends GetView<DetailPemeriksaanController> {
                                           Colors.black),
                                       visualDensity: VisualDensity.compact,
                                     ),
-                                    const Text(
-                                      'Kunjungan Sakit',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
+                                    const Expanded(
+                                        child: Text('Kunjungan Sakit',
+                                            style: TextStyle(fontSize: 12))),
                                   ],
                                 ),
                               ),

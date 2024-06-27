@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:healthrecord/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -33,11 +32,6 @@ class TambahPemeriksaanController extends GetxController {
 
   // Counter untuk ID pemeriksaan
   int nextId = 1;
-  // Mengenerate ID pemeriksaan berikutnya
-  String generateNextId() {
-    String formattedId = 'RM-${nextId.toString().padLeft(6, '0')}';
-    return formattedId;
-  }
 
   @override
   void onInit() {
@@ -95,8 +89,9 @@ class TambahPemeriksaanController extends GetxController {
         // Mengisi field dengan data dari Firestore
         nikController.text = data['nik'] ?? '';
         if (data['tanggal_lahir'] != null) {
-          tanggalLahirController.value =
-              DateFormat('dd-MM-yyyy').parse(data['tanggal_lahir']);
+          // Pastikan untuk menggunakan Timestamp dari Firestore
+          Timestamp timestamp = data['tanggal_lahir'];
+          tanggalLahirController.value = timestamp.toDate();
         } else {
           tanggalLahirController.value = null;
         }
@@ -109,29 +104,30 @@ class TambahPemeriksaanController extends GetxController {
 
   // Fungsi untuk validasi field
   bool validateFields() {
-    if (namaPasienController.text.isEmpty ||
-        nikController.text.isEmpty ||
+    if (nikController.text.isEmpty ||
         tanggalLahirController.value == null ||
         jenisKelaminController.value.isEmpty ||
         tanggalWaktuPemeriksaanController.value == null ||
         kunjunganTypeController.value.isEmpty ||
         keluhanUtamaController.text.isEmpty ||
         riwayatPenyakitController.text.isEmpty ||
+        riwayatpenyakitsebelumnyaController.text.isEmpty ||
+        riwayatAlergiController.text.isEmpty ||
+        riwayatObatController.text.isEmpty ||
         tekananDarahController.text.isEmpty ||
         denyutNadiController.text.isEmpty ||
         suhuTubuhController.text.isEmpty ||
         pernafasanController.text.isEmpty ||
         tinggiBadanController.text.isEmpty ||
         beratBadanController.text.isEmpty) {
-      isDataLoaded.value = true;
       Get.snackbar('Error', 'Semua field harus diisi');
       return false;
     }
 
-    if (!RegExp(r"^\d{16}$").hasMatch(nikController.text)) {
-      Get.snackbar('Error', 'NIK harus berisi 16 angka');
-      return false;
-    }
+    // if (!RegExp(r"^\d{16}$").hasMatch(nikController.text)) {
+    //   Get.snackbar('Error', 'NIK harus berisi 16 angka');
+    //   return false;
+    // }
 
     if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(namaPasienController.text)) {
       Get.snackbar('Error', 'Nama pasien hanya boleh berisi huruf');
@@ -213,15 +209,21 @@ class TambahPemeriksaanController extends GetxController {
 
     CollectionReference pemeriksaan =
         FirebaseFirestore.instance.collection('pemeriksaan');
+
+    // Format ID pemeriksaan
+    String formattedId =
+        'RM-${(nextId).toString().padLeft(6, '0')}'; // RM-000001
+
     try {
       var result = await pemeriksaan.add({
+        'id_pemeriksaan':
+            formattedId, // Simpan ID pemeriksaan dengan format baru
         'nama_pasien': namaPasienController.text,
         'nik': nikController.text,
-        'tanggal_lahir': tanggalLahirController.value != null
-            ? DateFormat('yyyy-MM-dd').format(tanggalLahirController.value!)
-            : null,
+        'tanggal_lahir': Timestamp.fromDate(tanggalLahirController.value!),
         'jenis_kelamin': jenisKelaminController.value,
-        'tanggal_waktu_pemeriksaan': tanggalWaktuPemeriksaanController.value,
+        'tanggal_waktu_pemeriksaan':
+            Timestamp.fromDate(tanggalWaktuPemeriksaanController.value!),
         'kunjungan_type': kunjunganTypeController.value,
         'keluhan_utama': keluhanUtamaController.text,
         'riwayat_penyakit': riwayatPenyakitController.text,
@@ -235,6 +237,15 @@ class TambahPemeriksaanController extends GetxController {
         'tinggi_badan': tinggiBadanController.text,
         'berat_badan': beratBadanController.text,
       });
+
+      // Increment nextId for the next entry
+      nextId++;
+
+      // Update nextId in Firestore
+      await FirebaseFirestore.instance
+          .collection('counters')
+          .doc('pemeriksaan')
+          .update({'nextId': nextId});
 
       Get.snackbar('Sukses', 'Data berhasil disimpan');
 
@@ -271,8 +282,9 @@ class TambahPemeriksaanController extends GetxController {
         namaPasienController.text = data['nama'] ?? '';
         nikController.text = data['nik'] ?? '';
         if (data['tanggal_lahir'] != null) {
-          tanggalLahirController.value =
-              DateFormat('yyyy-MM-dd').parse(data['tanggal_lahir']);
+          // Pastikan untuk menggunakan Timestamp dari Firestore
+          Timestamp timestamp = data['tanggal_lahir'];
+          tanggalLahirController.value = timestamp.toDate();
         }
         jenisKelaminController.value = data['jenis_kelamin'] ?? '';
         isDataLoaded.value = true;
@@ -280,7 +292,6 @@ class TambahPemeriksaanController extends GetxController {
     }
   }
 
-  //mengosongkan field
   void batal() {
     namaPasienController.clear();
     nikController.clear();
@@ -301,6 +312,7 @@ class TambahPemeriksaanController extends GetxController {
     beratBadanController.clear();
   }
 
+  // Mengosongkan field
   void clearFields() {
     namaPasienController.clear();
     nikController.clear();

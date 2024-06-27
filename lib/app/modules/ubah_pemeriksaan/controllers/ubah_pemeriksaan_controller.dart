@@ -40,9 +40,8 @@ class UbahPemeriksaanController extends GetxController {
     DocumentSnapshot docSnapshot = await pemeriksaan.doc(documentId).get();
 
     if (docSnapshot.exists) {
-      originalData =
-          docSnapshot.data() as Map<String, dynamic>; // Simpan data awal
-      loadData(originalData!);
+      Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+      loadData(data);
     } else {
       Get.snackbar('Error', 'Data tidak ditemukan');
       Get.back();
@@ -52,11 +51,27 @@ class UbahPemeriksaanController extends GetxController {
   void loadData(Map<String, dynamic> data) {
     namaPasienController.text = data['nama_pasien'];
     nikController.text = data['nik'];
-    tanggalLahirController.value =
-        (data['tanggal_lahir'] as Timestamp).toDate();
+
+    // Konversi tanggal_lahir dari String menjadi DateTime
+    if (data['tanggal_lahir'] is Timestamp) {
+      tanggalLahirController.value =
+          (data['tanggal_lahir'] as Timestamp).toDate();
+    } else {
+      tanggalLahirController.value =
+          DateTime.tryParse(data['tanggal_lahir'] ?? '');
+    }
+
     jenisKelaminController.value = data['jenis_kelamin'];
-    tanggalWaktuPemeriksaanController.value =
-        (data['tanggal_waktu_pemeriksaan'] as Timestamp).toDate();
+
+    // Konversi tanggal_waktu_pemeriksaan dari String menjadi DateTime
+    if (data['tanggal_waktu_pemeriksaan'] is Timestamp) {
+      tanggalWaktuPemeriksaanController.value =
+          (data['tanggal_waktu_pemeriksaan'] as Timestamp).toDate();
+    } else {
+      tanggalWaktuPemeriksaanController.value =
+          DateTime.tryParse(data['tanggal_waktu_pemeriksaan'] ?? '');
+    }
+
     kunjunganTypeController.value = data['kunjungan_type'];
     keluhanUtamaController.text = data['keluhan_utama'];
     riwayatPenyakitController.text = data['riwayat_penyakit'];
@@ -97,10 +112,10 @@ class UbahPemeriksaanController extends GetxController {
       return false;
     }
 
-    if (!RegExp(r"^\d{16}$").hasMatch(nikController.text)) {
-      Get.snackbar('Error', 'NIK harus berisi 16 angka');
-      return false;
-    }
+    // if (!RegExp(r"^\d{16}$").hasMatch(nikController.text)) {
+    //   Get.snackbar('Error', 'NIK harus berisi 16 angka');
+    //   return false;
+    // }
 
     if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(namaPasienController.text)) {
       Get.snackbar('Error', 'Nama pasien hanya boleh berisi huruf');

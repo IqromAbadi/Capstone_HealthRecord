@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:healthrecord/app/modules/dashboard/controllers/dashboard_controller.dart';
 import 'package:healthrecord/app/modules/lupapassword/controllers/lupapassword_controller.dart';
 import 'package:healthrecord/app/modules/masuk/controllers/masuk_controller.dart';
@@ -20,7 +21,7 @@ void main() async {
       storageBucket: "healthrecord-ad04f.appspot.com",
     ),
   );
-
+  await GetStorage.init();
   Get.put(MasukController());
   Get.put(LupapasswordController());
   Get.put(OnboardingController());

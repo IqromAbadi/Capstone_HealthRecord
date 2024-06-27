@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/tambah_pemeriksaan_controller.dart';
 
-class TambahPemeriksaanViewNew extends GetView<TambahPemeriksaanController> {
-  const TambahPemeriksaanViewNew({Key? key}) : super(key: key);
+class TambahPemeriksaanNEWView extends GetView<TambahPemeriksaanController> {
+  const TambahPemeriksaanNEWView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class TambahPemeriksaanViewNew extends GetView<TambahPemeriksaanController> {
                                 elevation: 4.0,
                                 child: SizedBox(
                                   width: 280, // Atur lebar di sini
-                                  child: SizedBox(
+                                  child: Container(
                                     height: min(50.0 * options.length, 200),
                                     child: ListView.builder(
                                       itemCount: options.length,
@@ -109,7 +109,7 @@ class TambahPemeriksaanViewNew extends GetView<TambahPemeriksaanController> {
                             return TextField(
                               controller: textEditingController,
                               focusNode: focusNode,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: 'Masukan Nama Pasien',
                               ),
                             );
@@ -172,75 +172,31 @@ class TambahPemeriksaanViewNew extends GetView<TambahPemeriksaanController> {
                                     TextStyle(color: Colors.black),
                               ),
                             )),
-                        Obx(() => Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: Row(
-                                    children: [
-                                      Radio<String>(
-                                        value: 'Laki-laki',
-                                        groupValue: controller
-                                            .jenisKelaminController.value,
-                                        onChanged: (value) {
-                                          controller.jenisKelaminController
-                                              .value = value!;
-                                        },
-                                        fillColor:
-                                            const MaterialStatePropertyAll(
-                                                Colors.black),
-                                      ),
-                                      const Text('Laki-laki'),
-                                    ],
-                                  ),
+                        Obx(() => TextFormField(
+                              readOnly: true,
+                              controller: TextEditingController(
+                                text: controller.selectedPasienData
+                                        .value['jenis_kelamin'] ??
+                                    '',
+                              ),
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'poppins',
+                              ),
+                              cursorColor: Colors.black,
+                              decoration: const InputDecoration(
+                                labelText: 'Jenis Kelamin',
+                                labelStyle: TextStyle(
+                                  fontFamily: 'poppins',
+                                  fontSize: 16,
                                 ),
-                                const SizedBox(width: 10),
-                                Flexible(
-                                  child: Row(
-                                    children: [
-                                      Radio<String>(
-                                        value: 'Perempuan',
-                                        groupValue: controller
-                                            .jenisKelaminController.value,
-                                        onChanged: (value) {
-                                          controller.jenisKelaminController
-                                              .value = value!;
-                                        },
-                                        fillColor:
-                                            const MaterialStatePropertyAll(
-                                                Colors.black),
-                                      ),
-                                      const Text('Perempuan'),
-                                    ],
-                                  ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black),
                                 ),
-                              ],
+                                floatingLabelStyle:
+                                    TextStyle(color: Colors.black),
+                              ),
                             )),
-                        // Obx(() => TextFormField(
-                        //       readOnly: true,
-                        //       controller: TextEditingController(
-                        //         text: controller.selectedPasienData
-                        //                 .value['jenis_kelamin'] ??
-                        //             '',
-                        //       ),
-                        //       style: const TextStyle(
-                        //         color: Colors.black,
-                        //         fontFamily: 'poppins',
-                        //       ),
-                        //       cursorColor: Colors.black,
-                        //       decoration: const InputDecoration(
-                        //         labelText: 'Jenis Kelamin',
-                        //         labelStyle: TextStyle(
-                        //           fontFamily: 'poppins',
-                        //           fontSize: 16,
-                        //         ),
-                        //         focusedBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(color: Colors.black),
-                        //         ),
-                        //         floatingLabelStyle:
-                        //             TextStyle(color: Colors.black),
-                        //       ),
-                        //     )),
                       ],
                     ),
                   ),
@@ -355,9 +311,9 @@ class TambahPemeriksaanViewNew extends GetView<TambahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      const Expanded(
+                                      Expanded(
                                         // Add this
-                                        child: Text(
+                                        child: const Text(
                                           'Kunjungan Sehat',
                                           style: TextStyle(fontSize: 12),
                                         ),
@@ -382,9 +338,9 @@ class TambahPemeriksaanViewNew extends GetView<TambahPemeriksaanController> {
                                                 Colors.black),
                                         visualDensity: VisualDensity.compact,
                                       ),
-                                      const Expanded(
+                                      Expanded(
                                         // Add this
-                                        child: Text(
+                                        child: const Text(
                                           'Kunjungan Sakit',
                                           style: TextStyle(fontSize: 12),
                                         ),
